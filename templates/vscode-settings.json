@@ -1,0 +1,15 @@
+{
+    "chat.promptFilesRecommendations": {
+        "hsdd.constitution": true,
+        "hsdd.specify": true,
+        "hsdd.plan": true,
+        "hsdd.tasks": true,
+        "hsdd.clarify": true,
+        "hsdd.review": true,
+        "hsdd.trace": true,
+        "hsdd.check-no-code": true
+    },
+    "chat.tools.terminal.autoApprove": {
+        ".hsdd/scripts/bash/": true
+    }
+}

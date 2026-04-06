@@ -2,194 +2,147 @@
 
 **A specification-driven development CLI that keeps you as the sole code author.**
 
-AI helps you think — you write every line of code.
+AI plans, you code. Every line.
 
 ---
 
 ## What Is This?
 
-This project adapts the spec-first workflow from [spec-kit](https://github.com/github/spec-kit) with one foundational change: **the AI never writes code**. Specifications remain the source of truth. AI produces specs, plans, task breakdowns, and reviews — all in prose. You implement everything yourself.
+This tool brings spec-driven development to GitHub Copilot with one foundational rule: **the AI never writes code**. Specifications drive development. AI produces specs, plans, task breakdowns, and reviews -- all in prose. You implement everything yourself.
 
 The result is a disciplined workflow where every feature starts with a specification, gets planned in prose, becomes a human task checklist, and gets reviewed against the spec after you build it.
 
-## Why?
+## Install
 
-The original SDD philosophy argues that specifications should drive development, not the reverse. That philosophy is powerful. But when coupled with automatic code generation, it can reduce developer understanding, weaken authorship, and hide flawed specs behind AI-produced code.
+```bash
+# Install globally via uv
+uv tool install human-sdd-cli --from git+https://github.com/Lucas-Frazao/human-sdd-cli.git
 
-This tool preserves the strongest idea from SDD — that specifications should drive development — while solving a real concern: **preserving developer understanding and authorship.**
-
-It is designed for:
-
-- **Solo developers** who want strong planning support without AI coding.
-- **Students** who want to learn architecture and implementation deeply.
-- **Engineers** who want an auditable, specification-first workflow.
-- **Teams** experimenting with AI-assisted planning but with strict code authorship rules.
+# Or for development
+git clone https://github.com/Lucas-Frazao/human-sdd-cli.git
+cd human-sdd-cli
+uv pip install -e ".[dev]"
+```
 
 ## Quick Start
 
-### Install
+### 1. Initialize a project
 
-```
-pip install -e .
-```
-
-### Initialize a project
-
-```
-sdd init --name "my-project"
+```bash
+hsdd init my-project
 ```
 
-This creates your workspace with templates, a constitution, and documentation.
+This creates:
+- `.hsdd/` directory with constitution, templates, and scripts
+- `.github/agents/` with Copilot agent commands (`hsdd.*.agent.md`)
+- `.github/prompts/` with companion prompt files
+- `.github/copilot-instructions.md` with project context
+- `.vscode/settings.json` with prompt file recommendations
 
-### Specify a feature
+### 2. Open in VS Code with Copilot
 
-```
-sdd specify --idea "User authentication with email and password"
-```
+Open the project in VS Code and use Copilot Chat with these commands:
 
-The AI helps write a structured spec. Ambiguity gets marked with `[NEEDS CLARIFICATION]` instead of guessed.
+| Command | What it does |
+|---------|-------------|
+| `/hsdd.specify` | Create a feature specification from a natural language description |
+| `/hsdd.plan` | Generate a technical planning package (prose only, no code) |
+| `/hsdd.tasks` | Create a human execution checklist |
+| `/hsdd.clarify` | Find ambiguity and contradictions in specs |
+| `/hsdd.review` | Compare your implementation against the spec |
+| `/hsdd.trace` | Map requirements to tasks and check coverage |
+| `/hsdd.check-no-code` | Validate no AI code leaked into artifacts |
+| `/hsdd.constitution` | Create or update the project constitution |
 
-### Generate a plan
-
-```
-sdd plan --feature 001-user-authentication
-```
-
-Produces `plan.md`, `research.md`, `data-model.md`, `contracts/`, and `quickstart.md` — all in prose.
-
-### Create a task checklist
-
-```
-sdd tasks --feature 001-user-authentication
-```
-
-A sequenced, traceable implementation checklist for you, the human developer.
-
-### Implement everything yourself
-
-This is the whole point. The CLI does not help here.
-
-### Review your work against the spec
+### 3. The Workflow
 
 ```
-sdd review --feature 001-user-authentication --notes "Implemented login and signup endpoints"
+  /hsdd.specify ──> /hsdd.plan ──> /hsdd.tasks ──> YOU CODE ──> /hsdd.review ──> /hsdd.trace
 ```
 
-### Check traceability
-
-```
-sdd trace --feature 001-user-authentication
-```
-
-### Validate no AI-generated code leaked in
-
-```
-sdd check-no-code --feature 001-user-authentication
-```
-
-### Find ambiguity
-
-```
-sdd clarify --feature 001-user-authentication
-```
-
-## Commands
-
-| Command | Purpose |
-|---------|---------|
-| `sdd init` | Initialize workspace with templates and constitution |
-| `sdd specify` | Turn an idea into a structured specification |
-| `sdd plan` | Generate a technical planning package (prose only) |
-| `sdd tasks` | Create a human implementation checklist |
-| `sdd review` | Compare your implementation against the spec |
-| `sdd clarify` | Find ambiguity and contradictions in docs |
-| `sdd trace` | Map requirements to tasks and check coverage |
-| `sdd check-no-code` | Validate artifacts contain no executable code |
-
-Every AI-powered command supports `--no-ai` for offline use.
-
-## The Constitution
-
-Every project initialized with `sdd init` gets a constitution with these articles:
-
-1. **Specification-First** — Specs before code.
-2. **Human Authorship** — You write all executable artifacts.
-3. **AI Planning-Only** — AI clarifies, researches, plans, and reviews.
-4. **Ambiguity Marking** — Unclear requirements get `[NEEDS CLARIFICATION]`.
-5. **Traceability** — Tasks map to requirements, reviews map to specs.
-6. **Review Over Regeneration** — Gaps produce follow-up tasks, not code.
-7. **No Executable AI Output** — Code fences and snippets are rejected.
-8. **Transparency** — Audit trail for all AI interactions.
-
-## Workflow
-
-```
-  ┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐
-  │   Init   │────▶│ Specify  │────▶│   Plan   │────▶│  Tasks   │
-  └──────────┘     └──────────┘     └──────────┘     └──────────┘
-                                                           │
-                                                           ▼
-  ┌──────────┐     ┌──────────┐     ┌──────────┐     ┌──────────┐
-  │  Trace   │◀────│  Review  │◀────│  YOU     │◀────│ Implement│
-  └──────────┘     └──────────┘     │  CODE    │     └──────────┘
-                                    └──────────┘
-```
+1. **Specify**: Describe your feature in natural language. AI creates a structured spec.
+2. **Plan**: AI generates research, data models, contracts -- all in prose, no code.
+3. **Tasks**: AI creates a sequenced, traceable checklist for you.
+4. **You Code**: Write every line yourself. That's the point.
+5. **Review**: AI compares your implementation against the spec. Produces follow-up tasks, not patches.
+6. **Trace**: Verify every requirement has corresponding tasks and implementation.
 
 ## Project Structure
 
+After `hsdd init`, your project looks like:
+
 ```
-your-project/
-├── .sdd                         # Marker file
-├── docs/
-│   ├── constitution.md          # Project rules
-│   ├── philosophy.md            # Why this workflow exists
-│   └── workflow.md              # How to use it
-├── templates/                   # Reusable Markdown templates
-│   ├── spec-template.md
-│   ├── plan-template.md
-│   ├── tasks-template.md
-│   ├── constitution-template.md
-│   ├── review-template.md
-│   └── research-template.md
+my-project/
+├── .hsdd/
+│   ├── memory/
+│   │   └── constitution.md          # The 8 Articles
+│   ├── templates/
+│   │   ├── spec-template.md
+│   │   ├── plan-template.md
+│   │   ├── tasks-template.md
+│   │   ├── constitution-template.md
+│   │   ├── review-template.md
+│   │   └── research-template.md
+│   ├── scripts/
+│   │   └── bash/
+│   │       ├── common.sh
+│   │       ├── create-new-feature.sh
+│   │       └── setup-plan.sh
+│   └── init-options.json
+├── .github/
+│   ├── agents/
+│   │   ├── hsdd.specify.agent.md
+│   │   ├── hsdd.plan.agent.md
+│   │   ├── hsdd.tasks.agent.md
+│   │   ├── hsdd.clarify.agent.md
+│   │   ├── hsdd.review.agent.md
+│   │   ├── hsdd.trace.agent.md
+│   │   ├── hsdd.check-no-code.agent.md
+│   │   └── hsdd.constitution.agent.md
+│   ├── prompts/
+│   │   ├── hsdd.specify.prompt.md
+│   │   ├── hsdd.plan.prompt.md
+│   │   └── ...
+│   └── copilot-instructions.md
+├── .vscode/
+│   └── settings.json
 └── specs/
     └── 001-feature-name/
-        ├── spec.md              # Specification
-        ├── plan.md              # Technical plan (prose)
-        ├── research.md          # Trade-offs and context
-        ├── data-model.md        # Entities described in prose
-        ├── quickstart.md        # Validation scenarios
-        ├── tasks.md             # Human checklist
-        ├── review.md            # Spec compliance review
-        ├── traceability.md      # Requirement coverage report
-        └── contracts/           # Interface contracts (prose)
+        ├── spec.md
+        ├── plan.md
+        ├── research.md
+        ├── data-model.md
+        ├── quickstart.md
+        ├── tasks.md
+        ├── review.md
+        ├── traceability.md
+        └── contracts/
 ```
 
-## Configuration
+## The Constitution
 
-Set your OpenAI API key:
+Every project gets a constitution with 8 non-negotiable articles:
 
+1. **Specification-First** -- Specs before code.
+2. **Human Authorship** -- You write all executable artifacts.
+3. **AI Planning-Only** -- AI clarifies, researches, plans, and reviews.
+4. **Ambiguity Marking** -- Unclear requirements get `[NEEDS CLARIFICATION]`.
+5. **Traceability** -- Tasks map to requirements, reviews map to specs.
+6. **Review Over Regeneration** -- Gaps produce follow-up tasks, not code.
+7. **No Executable AI Output** -- Code fences and snippets are rejected.
+8. **Transparency** -- Audit trail for all AI interactions.
+
+## CLI Commands
+
+```bash
+hsdd init <project-name>   # Initialize a new project
+hsdd init --here            # Initialize in current directory
+hsdd integrate copilot      # Re-run Copilot integration
+hsdd check                  # Verify project setup
+hsdd version                # Show version
 ```
-export OPENAI_API_KEY="sk-..."
-```
 
-Use a different model:
-
-```
-sdd specify --idea "my feature" --model gpt-4o
-```
-
-## No-Code Enforcement
-
-The validator detects:
-
-- **Fenced code blocks** with language tags (Python, JS, Rust, Go, SQL, Bash, and 20+ more)
-- **Executable line patterns** (imports, function definitions, class definitions, SQL statements, shell commands)
-- **Config fragments** (package.json, pyproject.toml, Dockerfile, Kubernetes, Terraform)
-- **Unclosed code blocks**
-
-Every AI response passes through this validator before being saved. Violations are rejected and logged to the audit trail.
-
-## Differentiation from spec-kit
+## How It Differs from spec-kit
 
 | Area | spec-kit | human-sdd-cli |
 |------|----------|----------------|
@@ -200,17 +153,28 @@ Every AI response passes through this validator before being saved. Violations a
 | Tasks output | Ready for an AI agent | Ready for a human developer |
 | Output validation | None | No-code validator on every artifact |
 | Review model | Regeneration flow | Gap analysis without code fixes |
+| Namespace | `speckit.*` | `hsdd.*` |
+
+## Why?
+
+Specifications should drive development. But when coupled with automatic code generation, AI can reduce developer understanding, weaken authorship, and hide flawed specs behind generated code.
+
+This tool preserves the strongest idea from SDD -- that specifications should drive development -- while ensuring **developer understanding and authorship**.
+
+Built for:
+- **Solo developers** who want strong planning support without AI coding
+- **Students** who want to learn architecture and implementation deeply
+- **Engineers** who want an auditable, specification-first workflow
+- **Teams** experimenting with AI-assisted planning with strict code authorship rules
 
 ## Development
 
-```
-git clone https://github.com/frazaluc/human-sdd-cli.git
+```bash
+git clone https://github.com/Lucas-Frazao/human-sdd-cli.git
 cd human-sdd-cli
-pip install -e ".[dev]"
+uv pip install -e ".[dev]"
 pytest
 ```
-
-See [DEVELOPMENT.md](DEVELOPMENT.md) for architecture details and contribution patterns.
 
 ## Contributing
 

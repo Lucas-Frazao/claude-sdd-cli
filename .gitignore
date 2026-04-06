@@ -35,3 +35,4 @@ Thumbs.db
 
 # SDD audit trails (generated at runtime)
 *-audit.jsonl
+dist
