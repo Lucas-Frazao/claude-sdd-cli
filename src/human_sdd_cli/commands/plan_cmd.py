@@ -29,9 +29,11 @@ def _find_feature_dir(root: Path, feature: str) -> Path:
 @click.command()
 @click.option("--feature", "-f", required=True, help="Feature name or number (e.g. 001-user-auth).")
 @click.option("--path", "-p", default=".", help="Project root directory.")
-@click.option("--model", "-m", default="gpt-4o-mini", help="LLM model to use.")
+@click.option("--model", "-m", default=None, help="LLM model (default: gpt-4o-mini for OpenAI, gpt-4o for Copilot).")
+@click.option("--provider", "-P", default="auto", type=click.Choice(["auto", "openai", "copilot"]),
+              help="AI provider (auto-detected if omitted).")
 @click.option("--no-ai", is_flag=True, help="Skip AI generation, create blank templates only.")
-def plan_cmd(feature: str, path: str, model: str, no_ai: bool):
+def plan_cmd(feature: str, path: str, model: str, provider: str, no_ai: bool):
     """Generate a technical planning package from an approved specification."""
     root = Path(path).resolve()
     feature_dir = _find_feature_dir(root, feature)
@@ -59,7 +61,7 @@ def plan_cmd(feature: str, path: str, model: str, no_ai: bool):
     if no_ai:
         _create_blank_plan_artifacts(feature_dir)
     else:
-        _create_ai_plan_artifacts(feature_dir, spec_content, model)
+        _create_ai_plan_artifacts(feature_dir, spec_content, model, provider)
 
     console.print()
     console.print("[bold green]Planning package created.[/] Next steps:")
@@ -89,9 +91,9 @@ def _create_blank_plan_artifacts(feature_dir: Path):
     console.print("  [green]✓[/] Created contracts/")
 
 
-def _create_ai_plan_artifacts(feature_dir: Path, spec_content: str, model: str):
+def _create_ai_plan_artifacts(feature_dir: Path, spec_content: str, model: str, provider: str):
     """Generate planning artifacts using AI."""
-    ai = AIOrchestrator(model=model, audit_dir=feature_dir)
+    ai = AIOrchestrator(provider=provider, model=model, audit_dir=feature_dir)
 
     # ── plan.md ──
     console.print("[dim]Generating plan.md...[/]")

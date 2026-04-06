@@ -32,6 +32,7 @@ pytest --cov=human_sdd_cli --cov-report=term-missing
 ```
 src/human_sdd_cli/
 ├── __init__.py          # Package metadata and version
+├── config.py            # Configuration system (TOML config files)
 ├── cli/
 │   └── main.py          # Click CLI entry point and command registration
 ├── commands/
@@ -42,9 +43,15 @@ src/human_sdd_cli/
 │   ├── review_cmd.py    # sdd review
 │   ├── clarify_cmd.py   # sdd clarify
 │   ├── trace_cmd.py     # sdd trace
-│   └── check_no_code_cmd.py  # sdd check-no-code
+│   ├── check_no_code_cmd.py  # sdd check-no-code
+│   └── auth_cmd.py      # sdd auth (login/status/logout)
 ├── ai/
-│   └── __init__.py      # LLM orchestration, system prompt, audit trail
+│   └── __init__.py      # LLM orchestration, multi-provider support, audit trail
+├── auth/
+│   ├── __init__.py      # Public auth API: get_copilot_token()
+│   ├── device_flow.py   # GitHub Device Flow OAuth for Copilot
+│   ├── token_manager.py # Token persistence, refresh, and caching
+│   └── exceptions.py    # Auth-specific exception classes
 ├── templates/
 │   └── __init__.py      # Template loading, population, and copying
 ├── validators/
@@ -64,11 +71,34 @@ src/human_sdd_cli/
 Each internal module has a single responsibility:
 
 - **CLI layer** (`cli/`, `commands/`) — User interaction via Click. No business logic.
-- **AI layer** (`ai/`) — Prompt construction, LLM calls, constitution enforcement.
+- **AI layer** (`ai/`) — Prompt construction, multi-provider LLM calls, constitution enforcement.
+- **Auth layer** (`auth/`) — GitHub Copilot device flow, token management, refresh.
+- **Config layer** (`config.py`) — TOML config file loading and merging.
 - **Validation layer** (`validators/`) — Stateless code detection. No I/O.
 - **Document layer** (`templates/`, `parsers/`) — Reading and writing Markdown.
 - **Tracing layer** (`tracing/`) — Cross-artifact analysis.
 - **Review layer** (`review/`) — Prompt assembly for spec compliance reviews.
+
+### Auth module architecture
+
+The auth module handles GitHub Copilot authentication via a three-step process:
+
+1. **Device Flow** (`device_flow.py`) — Requests a device code from GitHub, displays a user code for browser entry, polls for an OAuth access token, then exchanges it for a Copilot session token.
+2. **Token Manager** (`token_manager.py`) — Persists tokens to `~/.config/human-sdd-cli/copilot-token.json` with 0600 permissions. Handles automatic refresh: if the Copilot token (~25 min lifetime) has expired, re-exchanges the OAuth token. If the OAuth token is invalid, triggers a full device flow re-auth.
+3. **Public API** (`__init__.py`) — Exposes `get_copilot_token()` which delegates to the token manager and handles the full lifecycle transparently.
+
+### Provider abstraction
+
+The `AIOrchestrator` supports two providers (`openai` and `copilot`) and an `auto` mode that detects the available provider. For Copilot, it uses the same `openai` SDK with a `base_url` override pointing to `api.githubcopilot.com`. The `generate()` method includes retry logic for Copilot auth errors (token expiry mid-session).
+
+### Configuration precedence
+
+Settings are resolved in this order (highest priority first):
+1. CLI flags (`--provider`, `--model`)
+2. Environment variables (`SDD_PROVIDER`, `SDD_MODEL`, `OPENAI_API_KEY`)
+3. Project config (`.sdd/config.toml`)
+4. User config (`~/.config/human-sdd-cli/config.toml`)
+5. Built-in defaults
 
 ### Why Click?
 

@@ -28,8 +28,10 @@ def _find_feature_dir(root: Path, feature: str) -> Path:
 @click.option("--notes", "-n", default="", help="Implementation notes from the developer.")
 @click.option("--notes-file", type=click.Path(exists=True), help="File containing implementation notes.")
 @click.option("--path", "-p", default=".", help="Project root directory.")
-@click.option("--model", "-m", default="gpt-4o-mini", help="LLM model to use.")
-def review_cmd(feature: str, notes: str, notes_file: str, path: str, model: str):
+@click.option("--model", "-m", default=None, help="LLM model (default: gpt-4o-mini for OpenAI, gpt-4o for Copilot).")
+@click.option("--provider", "-P", default="auto", type=click.Choice(["auto", "openai", "copilot"]),
+              help="AI provider (auto-detected if omitted).")
+def review_cmd(feature: str, notes: str, notes_file: str, path: str, model: str, provider: str):
     """Review human-written implementation against the spec and plan."""
     root = Path(path).resolve()
     feature_dir = _find_feature_dir(root, feature)
@@ -53,7 +55,7 @@ def review_cmd(feature: str, notes: str, notes_file: str, path: str, model: str)
     prompt = build_review_prompt(feature_dir, impl_notes)
 
     console.print("[dim]Running spec compliance review...[/]")
-    ai = AIOrchestrator(model=model, audit_dir=feature_dir)
+    ai = AIOrchestrator(provider=provider, model=model, audit_dir=feature_dir)
 
     try:
         review_content = ai.generate(

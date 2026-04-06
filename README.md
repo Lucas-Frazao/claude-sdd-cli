@@ -105,6 +105,9 @@ sdd clarify --feature 001-user-authentication
 | `sdd clarify` | Find ambiguity and contradictions in docs |
 | `sdd trace` | Map requirements to tasks and check coverage |
 | `sdd check-no-code` | Validate artifacts contain no executable code |
+| `sdd auth login` | Authenticate with GitHub Copilot |
+| `sdd auth status` | Show current authentication status |
+| `sdd auth logout` | Remove stored Copilot credentials |
 
 Every AI-powered command supports `--no-ai` for offline use.
 
@@ -166,17 +169,75 @@ your-project/
 
 ## Configuration
 
+### OpenAI (default)
+
 Set your OpenAI API key:
 
 ```
 export OPENAI_API_KEY="sk-..."
 ```
 
+### GitHub Copilot as AI Provider
+
+If you have a GitHub Copilot subscription, you can use it instead of an OpenAI API key.
+
+**Prerequisites:**
+- A GitHub account with an active Copilot subscription (Individual, Business, or Enterprise).
+
+**Quick start:**
+
+```
+sdd auth login
+```
+
+This opens your browser for GitHub device flow authentication. Enter the displayed code, authorize, and you're set.
+
+Once authenticated, all AI commands automatically use the Copilot provider:
+
+```
+sdd specify --idea "User authentication with OAuth"
+sdd plan --feature 001-user-auth
+```
+
+Check your auth status or log out:
+
+```
+sdd auth status
+sdd auth logout
+```
+
+### Provider Selection
+
+The CLI auto-detects the provider: if `OPENAI_API_KEY` is set, it uses OpenAI; if a cached Copilot token exists, it uses Copilot. Override with:
+
+```
+sdd specify --idea "my feature" --provider copilot
+sdd specify --idea "my feature" --provider openai
+```
+
+Or set it via environment variable:
+
+```
+export SDD_PROVIDER=copilot
+```
+
+Or in a project config file `.sdd/config.toml`:
+
+```
+[ai]
+provider = "copilot"
+default_model = "gpt-4o"
+```
+
+### Model Selection
+
 Use a different model:
 
 ```
 sdd specify --idea "my feature" --model gpt-4o
 ```
+
+Default models per provider: `gpt-4o-mini` for OpenAI, `gpt-4o` for Copilot.
 
 ## No-Code Enforcement
 

@@ -26,9 +26,11 @@ def _find_feature_dir(root: Path, feature: str) -> Path:
 @click.command()
 @click.option("--feature", "-f", required=True, help="Feature name or number.")
 @click.option("--path", "-p", default=".", help="Project root directory.")
-@click.option("--model", "-m", default="gpt-4o-mini", help="LLM model to use.")
+@click.option("--model", "-m", default=None, help="LLM model (default: gpt-4o-mini for OpenAI, gpt-4o for Copilot).")
+@click.option("--provider", "-P", default="auto", type=click.Choice(["auto", "openai", "copilot"]),
+              help="AI provider (auto-detected if omitted).")
 @click.option("--no-ai", is_flag=True, help="Skip AI, create blank template only.")
-def tasks_cmd(feature: str, path: str, model: str, no_ai: bool):
+def tasks_cmd(feature: str, path: str, model: str, provider: str, no_ai: bool):
     """Generate a human execution checklist from planning artifacts."""
     root = Path(path).resolve()
     feature_dir = _find_feature_dir(root, feature)
@@ -62,7 +64,7 @@ def tasks_cmd(feature: str, path: str, model: str, no_ai: bool):
             )
 
         console.print("[dim]Generating task breakdown...[/]")
-        ai = AIOrchestrator(model=model, audit_dir=feature_dir)
+        ai = AIOrchestrator(provider=provider, model=model, audit_dir=feature_dir)
 
         prompt = f"""Based on the following planning artifacts, create a detailed human
 implementation checklist.

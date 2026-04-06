@@ -38,9 +38,11 @@ def _next_feature_number(specs_dir: Path) -> int:
 @click.option("--idea", "-i", prompt="Describe your feature idea", help="Feature idea or description.")
 @click.option("--name", "-n", default=None, help="Feature name (auto-generated from idea if omitted).")
 @click.option("--path", "-p", default=".", help="Project root directory.")
-@click.option("--model", "-m", default="gpt-4o-mini", help="LLM model to use.")
+@click.option("--model", "-m", default=None, help="LLM model (default: gpt-4o-mini for OpenAI, gpt-4o for Copilot).")
+@click.option("--provider", "-P", default="auto", type=click.Choice(["auto", "openai", "copilot"]),
+              help="AI provider (auto-detected if omitted).")
 @click.option("--no-ai", is_flag=True, help="Skip AI generation, create blank template only.")
-def specify_cmd(idea: str, name: str, path: str, model: str, no_ai: bool):
+def specify_cmd(idea: str, name: str, path: str, model: str, provider: str, no_ai: bool):
     """Generate a structured specification from a feature idea."""
     root = Path(path).resolve()
     specs_dir = root / "specs"
@@ -74,6 +76,7 @@ def specify_cmd(idea: str, name: str, path: str, model: str, no_ai: bool):
         # Use AI to generate the specification
         console.print("[dim]Generating specification with AI...[/]")
         ai = AIOrchestrator(
+            provider=provider,
             model=model,
             audit_dir=feature_dir,
         )

@@ -11,6 +11,7 @@ from human_sdd_cli.commands.review_cmd import review_cmd
 from human_sdd_cli.commands.clarify_cmd import clarify_cmd
 from human_sdd_cli.commands.trace_cmd import trace_cmd
 from human_sdd_cli.commands.check_no_code_cmd import check_no_code_cmd
+from human_sdd_cli.commands.auth_cmd import auth_cmd
 
 
 @click.group()
@@ -31,6 +32,7 @@ cli.add_command(review_cmd, "review")
 cli.add_command(clarify_cmd, "clarify")
 cli.add_command(trace_cmd, "trace")
 cli.add_command(check_no_code_cmd, "check-no-code")
+cli.add_command(auth_cmd, "auth")
 
 
 if __name__ == "__main__":
