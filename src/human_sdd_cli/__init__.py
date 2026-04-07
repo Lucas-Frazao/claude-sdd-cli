@@ -523,7 +523,31 @@ def init(
             from human_sdd_cli.integrations.copilot import CopilotIntegration
 
             integration = CopilotIntegration()
-            created_files = integration.setup(project_path)
+            try:
+                created_files = integration.setup(project_path)
+            except FileNotFoundError as exc:
+                tracker.error("integration", str(exc))
+                console.print(
+                    f"\n[red bold]Copilot integration failed:[/red bold] {exc}\n"
+                    "[yellow]Run 'hsdd integrate copilot' after reinstalling "
+                    "to retry.[/yellow]"
+                )
+                raise typer.Exit(1)
+
+            # Validate that agent files were actually written
+            agents_dir = project_path / ".github" / "agents"
+            agent_files = list(agents_dir.glob("hsdd.*.agent.md")) if agents_dir.is_dir() else []
+            if not agent_files:
+                tracker.error(
+                    "integration",
+                    "Integration ran but no .agent.md files were created",
+                )
+                console.print(
+                    "\n[red bold]Copilot integration produced no agent files.[/red bold]\n"
+                    "[yellow]Run 'hsdd integrate copilot' to retry.[/yellow]"
+                )
+                raise typer.Exit(1)
+
             tracker.complete("integration", f"{len(created_files)} files created")
         else:
             tracker.skip("integration", f"Unknown assistant: {ai}")
@@ -590,7 +614,20 @@ def integrate(
         from human_sdd_cli.integrations.copilot import CopilotIntegration
 
         integration = CopilotIntegration()
-        created = integration.setup(project_path)
+        try:
+            created = integration.setup(project_path)
+        except FileNotFoundError as exc:
+            console.print(f"[red bold]Copilot integration failed:[/red bold] {exc}")
+            raise typer.Exit(1)
+
+        if not created:
+            console.print(
+                "[red bold]Copilot integration produced no files.[/red bold]\n"
+                "[yellow]This likely means command templates could not be located. "
+                "Reinstall the package and try again.[/yellow]"
+            )
+            raise typer.Exit(1)
+
         console.print(f"[green]Copilot integration complete.[/green] {len(created)} files created/updated.")
         for f in created:
             rel = f.relative_to(project_path)
@@ -645,9 +682,25 @@ def check():
 
     # Check copilot integration
     agents_dir = project_path / ".github" / "agents"
+    init_options_path = project_path / ".hsdd" / "init-options.json"
+    configured_ai = None
+    if init_options_path.is_file():
+        try:
+            configured_ai = json.loads(
+                init_options_path.read_text(encoding="utf-8")
+            ).get("ai_assistant")
+        except (json.JSONDecodeError, OSError):
+            pass
+
     if agents_dir.is_dir() and any(agents_dir.glob("hsdd.*.agent.md")):
         count = len(list(agents_dir.glob("hsdd.*.agent.md")))
         tracker.complete("copilot", f"{count} agent commands found")
+    elif configured_ai == "copilot":
+        tracker.error(
+            "copilot",
+            "Copilot was selected during init but .github/agents/ is missing -- "
+            "run 'hsdd integrate copilot' to fix",
+        )
     else:
         tracker.skip("copilot", "Not configured")
 

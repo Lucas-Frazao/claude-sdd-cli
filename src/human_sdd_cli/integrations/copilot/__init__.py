@@ -111,10 +111,22 @@ class CopilotIntegration:
 
         Reads command templates, processes them, writes as .agent.md files,
         then adds companion .prompt.md files and VS Code settings.
+
+        Raises
+        ------
+        FileNotFoundError
+            If no command templates can be located.  This prevents silent
+            failures where the integration *looks* successful but no agent
+            files are created.
         """
         templates = self.list_command_templates()
         if not templates:
-            return []
+            raise FileNotFoundError(
+                "Could not locate HSDD command templates.  Searched:\n"
+                f"  - core_pack: {Path(__file__).parent.parent / 'core_pack' / 'commands'}\n"
+                f"  - source repo: {Path(__file__).parent.parent.parent.parent.parent / 'templates' / 'commands'}\n"
+                "Ensure the package is installed correctly or run from the source repository."
+            )
 
         dest = project_root / self.registrar_config["dir"]
         dest.mkdir(parents=True, exist_ok=True)
