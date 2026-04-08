@@ -14,7 +14,6 @@ from claude_sdd_cli.commands.clarify_cmd import clarify_cmd
 from claude_sdd_cli.commands.trace_cmd import trace_cmd
 from claude_sdd_cli.commands.tech_stack_cmd import tech_stack_cmd
 from claude_sdd_cli.commands.architecture_cmd import architecture_cmd
-from claude_sdd_cli.commands.check_no_code_cmd import check_no_code_cmd
 
 
 @click.group()
@@ -38,7 +37,6 @@ cli.add_command(tasks_cmd, "tasks")
 cli.add_command(review_cmd, "review")
 cli.add_command(clarify_cmd, "clarify")
 cli.add_command(trace_cmd, "trace")
-cli.add_command(check_no_code_cmd, "check-no-code")
 
 
 if __name__ == "__main__":

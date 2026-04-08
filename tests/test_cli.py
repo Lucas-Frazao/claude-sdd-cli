@@ -73,34 +73,6 @@ class TestSpecifyCommand:
             assert dirs[1].startswith("002-")
 
 
-class TestCheckNoCodeCommand:
-    def test_clean_file_passes(self):
-        runner = CliRunner()
-        with tempfile.TemporaryDirectory() as tmpdir:
-            root = Path(tmpdir)
-            specs = root / "specs" / "001-test"
-            specs.mkdir(parents=True)
-            (specs / "spec.md").write_text("# Spec\n\nJust prose, no code.\n")
-            result = runner.invoke(cli, [
-                "check-no-code", "--feature", "001-test", "--path", tmpdir,
-            ])
-            assert result.exit_code == 0
-            assert "PASSED" in result.output
-
-    def test_dirty_file_fails(self):
-        runner = CliRunner()
-        with tempfile.TemporaryDirectory() as tmpdir:
-            root = Path(tmpdir)
-            specs = root / "specs" / "001-test"
-            specs.mkdir(parents=True)
-            (specs / "spec.md").write_text("# Spec\n\n```python\nprint('hi')\n```\n")
-            result = runner.invoke(cli, [
-                "check-no-code", "--feature", "001-test", "--path", tmpdir,
-            ])
-            assert result.exit_code != 0
-            assert "FAILED" in result.output
-
-
 class TestProductVisionCommand:
     def test_vision_no_ai(self):
         runner = CliRunner()

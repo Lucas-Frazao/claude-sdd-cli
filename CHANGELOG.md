@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **CLI framework** with 8 commands: `init`, `specify`, `plan`, `tasks`, `review`, `clarify`, `trace`, `check-no-code`.
+- **CLI framework** with 7 commands: `init`, `specify`, `plan`, `tasks`, `review`, `clarify`, `trace`.
 - **No-code validator** with regex and heuristic detection for code fences (20+ language tags), executable patterns (Python, JS, Rust, Go, SQL, Dockerfile), and config fragments.
 - **AI orchestration layer** with constitution-enforced system prompt, OpenAI integration, and audit trail (JSONL).
 - **Template system** with 6 reusable Markdown templates: spec, plan, tasks, constitution, review, research.

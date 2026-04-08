@@ -41,8 +41,7 @@ src/claude_sdd_cli/
 │   ├── tasks_cmd.py     # sdd tasks
 │   ├── review_cmd.py    # sdd review
 │   ├── clarify_cmd.py   # sdd clarify
-│   ├── trace_cmd.py     # sdd trace
-│   └── check_no_code_cmd.py  # sdd check-no-code
+│   └── trace_cmd.py     # sdd trace
 ├── ai/
 │   └── __init__.py      # LLM orchestration, system prompt, audit trail
 ├── templates/

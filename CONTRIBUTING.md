@@ -17,8 +17,7 @@ Thank you for your interest in contributing. This project welcomes contributions
 3. Make your changes.
 4. Add or update tests as appropriate.
 5. Run the test suite: `pytest`.
-6. Run the no-code validator against any new templates: `sdd check-no-code`.
-7. Commit with a clear message describing the change.
+6. Commit with a clear message describing the change.
 8. Open a Pull Request against `main`.
 
 ### Development Setup
