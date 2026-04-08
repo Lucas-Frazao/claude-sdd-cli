@@ -12,6 +12,8 @@ from claude_sdd_cli.commands.tasks_cmd import tasks_cmd
 from claude_sdd_cli.commands.review_cmd import review_cmd
 from claude_sdd_cli.commands.clarify_cmd import clarify_cmd
 from claude_sdd_cli.commands.trace_cmd import trace_cmd
+from claude_sdd_cli.commands.tech_stack_cmd import tech_stack_cmd
+from claude_sdd_cli.commands.architecture_cmd import architecture_cmd
 from claude_sdd_cli.commands.check_no_code_cmd import check_no_code_cmd
 
 
@@ -27,6 +29,8 @@ def cli():
 
 cli.add_command(init_cmd, "init")
 cli.add_command(product_vision_cmd, "vision")
+cli.add_command(tech_stack_cmd, "tech-stack")
+cli.add_command(architecture_cmd, "architecture")
 cli.add_command(feature_roadmap_cmd, "roadmap")
 cli.add_command(specify_cmd, "specify")
 cli.add_command(plan_cmd, "plan")

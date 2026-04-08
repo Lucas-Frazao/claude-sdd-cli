@@ -34,7 +34,19 @@ def feature_roadmap_cmd(description: str, path: str, model: str, no_ai: bool):
     if vision_path.exists():
         vision_content = vision_path.read_text()
     else:
-        console.print("[yellow]⚠ No product vision found. Run 'sdd vision' first for best results.[/]")
+        console.print("[yellow]⚠ No product vision found. Run 'csdd vision' first for best results.[/]")
+
+    # Load tech stack for context
+    tech_stack_content = ""
+    tech_stack_path = memory_dir / "tech-stack.md"
+    if tech_stack_path.exists():
+        tech_stack_content = tech_stack_path.read_text()
+
+    # Load architecture for context
+    architecture_content = ""
+    architecture_path = memory_dir / "architecture.md"
+    if architecture_path.exists():
+        architecture_content = architecture_path.read_text()
 
     console.print(Panel(
         "[bold cyan]Defining feature roadmap[/]\n"
@@ -60,6 +72,10 @@ def feature_roadmap_cmd(description: str, path: str, model: str, no_ai: bool):
         context_parts = []
         if vision_content:
             context_parts.append(f"PRODUCT VISION:\n{vision_content}")
+        if tech_stack_content:
+            context_parts.append(f"TECH STACK:\n{tech_stack_content}")
+        if architecture_content:
+            context_parts.append(f"ARCHITECTURE:\n{architecture_content}")
         if constitution:
             context_parts.append(f"CONSTITUTION:\n{constitution}")
         if description:

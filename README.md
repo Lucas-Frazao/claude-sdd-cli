@@ -46,6 +46,8 @@ Open the project in VS Code and use Copilot Chat with these commands:
 | Command | What it does |
 |---------|-------------|
 | `/csdd.vision` | Define the product vision -- what it is, who it's for, why it matters |
+| `/csdd.tech-stack` | Define the technology stack -- languages, frameworks, databases, tooling |
+| `/csdd.architecture` | Define the application architecture -- structure, layers, components |
 | `/csdd.roadmap` | Define ALL features needed to realize the product vision |
 | `/csdd.specify` | Create a feature specification from a natural language description |
 | `/csdd.plan` | Generate a technical planning package (prose only, no code) |
@@ -59,13 +61,15 @@ Open the project in VS Code and use Copilot Chat with these commands:
 ### 3. The Workflow
 
 ```
-  /csdd.vision --> /csdd.roadmap --> For EACH feature:
+  /csdd.vision --> /csdd.tech-stack --> /csdd.architecture --> /csdd.roadmap --> For EACH feature:
       /csdd.specify --> /csdd.clarify --> /csdd.plan --> /csdd.tasks --> CLAUDE CLI IMPLEMENTS --> /csdd.review
 ```
 
 1. **Vision**: Define the product vision -- what it is, who it's for, and why.
-2. **Roadmap**: Define ALL features needed to build the product.
-3. **For each feature from the roadmap:**
+2. **Tech Stack**: Define the technology stack -- languages, frameworks, databases, and tooling.
+3. **Architecture**: Define the application architecture -- structure, layers, components, and data flow.
+4. **Roadmap**: Define ALL features needed to build the product.
+5. **For each feature from the roadmap:**
    1. **Specify**: Describe the feature. AI creates a structured spec.
    2. **Clarify**: AI finds ambiguity and contradictions in the spec.
    3. **Plan**: AI generates research, data models, contracts -- all in prose, no code.
@@ -83,6 +87,8 @@ my-project/
 │   ├── memory/
 │   │   ├── constitution.md          # The 8 Articles
 │   │   ├── product-vision.md        # Product vision document
+│   │   ├── tech-stack.md            # Technology stack decisions
+│   │   ├── architecture.md          # Application architecture
 │   │   └── feature-roadmap.md       # Feature roadmap
 │   ├── templates/
 │   │   ├── spec-template.md
@@ -100,6 +106,8 @@ my-project/
 ├── .github/
 │   ├── agents/
 │   │   ├── csdd.vision.agent.md
+│   │   ├── csdd.tech-stack.agent.md
+│   │   ├── csdd.architecture.agent.md
 │   │   ├── csdd.roadmap.agent.md
 │   │   ├── csdd.specify.agent.md
 │   │   ├── csdd.plan.agent.md
@@ -148,6 +156,8 @@ Every project gets a constitution with 8 non-negotiable articles:
 csdd init <project-name>   # Initialize a new project
 csdd init --here            # Initialize in current directory
 csdd vision                 # Define the product vision
+csdd tech-stack             # Define the technology stack
+csdd architecture           # Define the application architecture
 csdd roadmap                # Define the feature roadmap
 csdd specify                # Create a feature specification
 csdd clarify                # Analyze specs for ambiguity
