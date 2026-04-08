@@ -6,8 +6,7 @@
         "hsdd.tasks": true,
         "hsdd.clarify": true,
         "hsdd.review": true,
-        "hsdd.trace": true,
-        "hsdd.check-no-code": true
+        "hsdd.trace": true
     },
     "chat.tools.terminal.autoApprove": {
         ".hsdd/scripts/bash/": true

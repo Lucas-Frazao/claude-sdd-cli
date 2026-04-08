@@ -55,7 +55,6 @@ Open the project in VS Code and use Copilot Chat with these commands:
 | `/csdd.clarify` | Find ambiguity and contradictions in specs |
 | `/csdd.review` | Compare the implementation against the spec |
 | `/csdd.trace` | Map requirements to tasks and check coverage |
-| `/csdd.check-no-code` | Validate no AI code leaked into artifacts |
 | `/csdd.constitution` | Create or update the project constitution |
 
 ### 3. The Workflow
@@ -115,7 +114,6 @@ my-project/
 │   │   ├── csdd.clarify.agent.md
 │   │   ├── csdd.review.agent.md
 │   │   ├── csdd.trace.agent.md
-│   │   ├── csdd.check-no-code.agent.md
 │   │   └── csdd.constitution.agent.md
 │   ├── prompts/
 │   │   ├── csdd.specify.prompt.md
@@ -165,7 +163,6 @@ csdd plan                   # Generate a technical plan
 csdd tasks                  # Create a Claude CLI execution checklist
 csdd review                 # Review implementation against spec
 csdd trace                  # Map requirements to tasks
-csdd check-no-code          # Validate no AI code in artifacts
 csdd integrate copilot      # Re-run Copilot integration
 csdd check                  # Verify project setup
 csdd version                # Show version

@@ -266,7 +266,6 @@ Use these commands in Copilot Chat:
 - `/csdd.clarify` -- Find ambiguity and contradictions in specs
 - `/csdd.review` -- Compare implementation against spec
 - `/csdd.trace` -- Map requirements to tasks and check coverage
-- `/csdd.check-no-code` -- Validate no AI code leaked into artifacts
 - `/csdd.constitution` -- Create or update the project constitution
 
 ## Project Structure
