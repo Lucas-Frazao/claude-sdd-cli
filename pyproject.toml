@@ -52,8 +52,10 @@ packages = ["src/claude_sdd_cli"]
 "templates/tech-stack-template.md" = "claude_sdd_cli/core_pack/templates/tech-stack-template.md"
 "templates/architecture-template.md" = "claude_sdd_cli/core_pack/templates/architecture-template.md"
 "templates/vscode-settings.json" = "claude_sdd_cli/core_pack/templates/vscode-settings.json"
-# Command templates
+# Command templates (legacy)
 "templates/commands" = "claude_sdd_cli/core_pack/commands"
+# Skill templates (Agent Skills for / slash commands)
+"templates/skills" = "claude_sdd_cli/core_pack/skills"
 # Shell scripts
 "scripts/bash" = "claude_sdd_cli/core_pack/scripts/bash"
 

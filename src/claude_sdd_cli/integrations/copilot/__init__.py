@@ -1,8 +1,8 @@
 """Copilot integration -- GitHub Copilot in VS Code.
 
 Copilot has several unique behaviors:
-- Commands use ``.agent.md`` extension
-- Each command gets a companion ``.prompt.md`` file in ``.github/prompts/``
+- Skills use ``SKILL.md`` inside ``.github/skills/<name>/`` directories
+- Each skill becomes a ``/<name>`` slash command in Copilot Chat
 - Installs ``.vscode/settings.json`` with prompt file recommendations
 - Context file lives at ``.github/copilot-instructions.md``
 """
@@ -23,28 +23,39 @@ class CopilotIntegration:
     config = {
         "name": "GitHub Copilot",
         "folder": ".github/",
-        "commands_subdir": "agents",
+        "commands_subdir": "skills",
         "install_url": None,
         "requires_cli": False,
     }
     registrar_config = {
-        "dir": ".github/agents",
+        "dir": ".github/skills",
         "format": "markdown",
         "args": "$ARGUMENTS",
-        "extension": ".agent.md",
+        "extension": "SKILL.md",
     }
     context_file = ".github/copilot-instructions.md"
 
-    def command_filename(self, template_name: str) -> str:
-        """Copilot commands use ``.agent.md`` extension."""
-        return f"csdd.{template_name}.agent.md"
+    def _locate_skill_templates_dir(self) -> Path | None:
+        """Find the skill templates directory.
 
-    def prompt_filename(self, template_name: str) -> str:
-        """Companion prompt file name."""
-        return f"csdd.{template_name}.prompt.md"
+        Checks for bundled core_pack first (wheel install), then falls back
+        to the source repo templates/skills/ directory.
+        """
+        # Check for bundled core_pack (wheel install)
+        core_pack = Path(__file__).parent.parent / "core_pack" / "skills"
+        if core_pack.is_dir():
+            return core_pack
+
+        # Fallback to source repo
+        repo_root = Path(__file__).parent.parent.parent.parent.parent
+        source_skills = repo_root / "templates" / "skills"
+        if source_skills.is_dir():
+            return source_skills
+
+        return None
 
     def _locate_commands_dir(self) -> Path | None:
-        """Find the command templates directory.
+        """Find the command templates directory (legacy, for backwards compat).
 
         Checks for bundled core_pack first (wheel install), then falls back
         to the source repo templates/commands/ directory.
@@ -75,71 +86,42 @@ class CopilotIntegration:
 
         return None
 
+    def list_skill_templates(self) -> list[Path]:
+        """Return sorted list of skill template directories."""
+        skills_dir = self._locate_skill_templates_dir()
+        if not skills_dir:
+            return []
+        return sorted(
+            d for d in skills_dir.iterdir()
+            if d.is_dir() and (d / "SKILL.md").exists()
+        )
+
     def list_command_templates(self) -> list[Path]:
-        """Return sorted list of command template files."""
+        """Return sorted list of command template files (legacy)."""
         commands_dir = self._locate_commands_dir()
         if not commands_dir:
             return []
         return sorted(commands_dir.glob("*.md"))
-
-    def _process_template(self, content: str) -> str:
-        """Process a command template for Copilot agent format.
-
-        - Strip script blocks from frontmatter
-        - Replace path references to use .csdd/ prefix
-        - Replace {ARGS} with $ARGUMENTS
-        """
-        # Replace relative path references to use .csdd/ prefix
-        content = re.sub(r'(?m)^(scripts/)', r'.csdd/scripts/', content)
-        content = re.sub(r'(?m)^(templates/)', r'.csdd/templates/', content)
-        content = re.sub(r'(?m)^(memory/)', r'.csdd/memory/', content)
-        content = content.replace('../../memory/', '.csdd/memory/')
-        content = content.replace('../../scripts/', '.csdd/scripts/')
-        content = content.replace('../../templates/', '.csdd/templates/')
-
-        # Replace {ARGS} placeholder
-        content = content.replace('{ARGS}', '$ARGUMENTS')
-
-        return content
 
     def setup(
         self,
         project_root: Path,
         **opts: Any,
     ) -> list[Path]:
-        """Install copilot commands, companion prompts, and VS Code settings.
+        """Install copilot skills, VS Code settings, and copilot instructions.
 
-        Reads command templates, processes them, writes as .agent.md files,
-        then adds companion .prompt.md files and VS Code settings.
+        Reads skill templates (SKILL.md directories), copies them to
+        .github/skills/<name>/SKILL.md, then adds VS Code settings and
+        copilot-instructions.md.
         """
-        templates = self.list_command_templates()
-        if not templates:
-            return []
-
-        dest = project_root / self.registrar_config["dir"]
-        dest.mkdir(parents=True, exist_ok=True)
         created: list[Path] = []
 
-        # 1. Process and write command files as .agent.md
-        for src_file in templates:
-            raw = src_file.read_text(encoding="utf-8")
-            processed = self._process_template(raw)
-            dst_name = self.command_filename(src_file.stem)
-            dst_file = dest / dst_name
-            dst_file.write_text(processed, encoding="utf-8")
-            created.append(dst_file)
+        # 1. Install skills from skill templates
+        skill_templates = self.list_skill_templates()
+        if skill_templates:
+            created.extend(self._install_skills(project_root, skill_templates))
 
-        # 2. Generate companion .prompt.md files
-        prompts_dir = project_root / ".github" / "prompts"
-        prompts_dir.mkdir(parents=True, exist_ok=True)
-        for src_file in templates:
-            cmd_name = f"csdd.{src_file.stem}"
-            prompt_content = f"---\nagent: {cmd_name}\n---\n"
-            prompt_file = prompts_dir / f"{cmd_name}.prompt.md"
-            prompt_file.write_text(prompt_content, encoding="utf-8")
-            created.append(prompt_file)
-
-        # 3. Write .vscode/settings.json
+        # 2. Write .vscode/settings.json
         settings_src = self._vscode_settings_path()
         if settings_src and settings_src.is_file():
             dst_settings = project_root / ".vscode" / "settings.json"
@@ -150,7 +132,7 @@ class CopilotIntegration:
                 shutil.copy2(settings_src, dst_settings)
                 created.append(dst_settings)
 
-        # 4. Write copilot-instructions.md
+        # 3. Write copilot-instructions.md
         context_path = project_root / self.context_file
         context_path.parent.mkdir(parents=True, exist_ok=True)
         if not context_path.exists():
@@ -159,6 +141,28 @@ class CopilotIntegration:
                 encoding="utf-8",
             )
             created.append(context_path)
+
+        return created
+
+    def _install_skills(
+        self, project_root: Path, skill_templates: list[Path]
+    ) -> list[Path]:
+        """Copy skill template directories to .github/skills/."""
+        dest = project_root / self.registrar_config["dir"]
+        dest.mkdir(parents=True, exist_ok=True)
+        created: list[Path] = []
+
+        for skill_dir in skill_templates:
+            skill_name = skill_dir.name
+            dst_skill_dir = dest / skill_name
+            dst_skill_dir.mkdir(parents=True, exist_ok=True)
+
+            # Copy all files in the skill directory
+            for src_file in skill_dir.iterdir():
+                if src_file.is_file():
+                    dst_file = dst_skill_dir / src_file.name
+                    shutil.copy2(src_file, dst_file)
+                    created.append(dst_file)
 
         return created
 
@@ -238,35 +242,35 @@ Implementation tasks are sent to Claude CLI.
 
 The recommended workflow is:
 
-1. `/csdd.constitution` -- Define project principles (done during init)
-2. `/csdd.vision` -- Define the product vision
-3. `/csdd.tech-stack` -- Define the technology stack
-4. `/csdd.architecture` -- Define the application architecture
-5. `/csdd.roadmap` -- Define ALL features needed to realize the product
+1. `/csdd-constitution` -- Define project principles (done during init)
+2. `/csdd-vision` -- Define the product vision
+3. `/csdd-tech-stack` -- Define the technology stack
+4. `/csdd-architecture` -- Define the application architecture
+5. `/csdd-roadmap` -- Define ALL features needed to realize the product
 6. For EACH feature from the roadmap:
-   - `/csdd.specify` -- Create a feature specification
-   - `/csdd.clarify` -- Find ambiguity and contradictions
-   - `/csdd.plan` -- Generate a technical planning package
-   - `/csdd.tasks` -- Create a human execution checklist
+   - `/csdd-specify` -- Create a feature specification
+   - `/csdd-clarify` -- Find ambiguity and contradictions
+   - `/csdd-plan` -- Generate a technical planning package
+   - `/csdd-tasks` -- Create a human execution checklist
    - CLAUDE CLI IMPLEMENTS the feature
-   - `/csdd.review` -- Compare implementation against spec
-   - `/csdd.trace` -- Map requirements to tasks
+   - `/csdd-review` -- Compare implementation against spec
+   - `/csdd-trace` -- Map requirements to tasks
 
-## Available Commands
+## Available Skills (Slash Commands)
 
-Use these commands in Copilot Chat:
+Type `/` in Copilot Chat and select a skill:
 
-- `/csdd.vision` -- Define the product vision (what, who, why)
-- `/csdd.tech-stack` -- Define the technology stack (languages, frameworks, databases, tooling)
-- `/csdd.architecture` -- Define the application architecture (structure, layers, components)
-- `/csdd.roadmap` -- Define ALL features needed to realize the product
-- `/csdd.specify` -- Create a feature specification from a natural language description
-- `/csdd.plan` -- Generate a technical planning package (prose only)
-- `/csdd.tasks` -- Create a human execution checklist
-- `/csdd.clarify` -- Find ambiguity and contradictions in specs
-- `/csdd.review` -- Compare implementation against spec
-- `/csdd.trace` -- Map requirements to tasks and check coverage
-- `/csdd.constitution` -- Create or update the project constitution
+- `/csdd-vision` -- Define the product vision (what, who, why)
+- `/csdd-tech-stack` -- Define the technology stack (languages, frameworks, databases, tooling)
+- `/csdd-architecture` -- Define the application architecture (structure, layers, components)
+- `/csdd-roadmap` -- Define ALL features needed to realize the product
+- `/csdd-specify` -- Create a feature specification from a natural language description
+- `/csdd-plan` -- Generate a technical planning package (prose only)
+- `/csdd-tasks` -- Create a human execution checklist
+- `/csdd-clarify` -- Find ambiguity and contradictions in specs
+- `/csdd-review` -- Compare implementation against spec
+- `/csdd-trace` -- Map requirements to tasks and check coverage
+- `/csdd-constitution` -- Create or update the project constitution
 
 ## Project Structure
 
@@ -277,8 +281,7 @@ Use these commands in Copilot Chat:
 - `.csdd/memory/feature-roadmap.md` -- Feature roadmap
 - `.csdd/templates/` -- Markdown templates for specs, plans, tasks, etc.
 - `specs/` -- Feature specifications and planning artifacts
-- `.github/agents/` -- Copilot agent command files
-- `.github/prompts/` -- Companion prompt files
+- `.github/skills/` -- Copilot skill files (slash commands)
 
 ## The 8 Articles
 

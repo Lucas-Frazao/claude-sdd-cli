@@ -561,10 +561,10 @@ def init(
     if ai == "copilot":
         next_steps.add_row("1.", "Open the project in VS Code")
         next_steps.add_row("2.", "Open Copilot Chat")
-        next_steps.add_row("3.", "Type: /csdd.vision to define your product vision")
-        next_steps.add_row("4.", "Type: /csdd.tech-stack to define your technology stack")
-        next_steps.add_row("5.", "Type: /csdd.architecture to define your application architecture")
-        next_steps.add_row("6.", "Type: /csdd.roadmap to define your feature roadmap")
+        next_steps.add_row("3.", "Type: /csdd-vision to define your product vision")
+        next_steps.add_row("4.", "Type: /csdd-tech-stack to define your technology stack")
+        next_steps.add_row("5.", "Type: /csdd-architecture to define your application architecture")
+        next_steps.add_row("6.", "Type: /csdd-roadmap to define your feature roadmap")
         next_steps.add_row("7.", "For each feature: specify -> clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review")
     else:
         next_steps.add_row("1.", "Review .csdd/memory/constitution.md")
@@ -623,7 +623,7 @@ def check():
     tracker.add("roadmap", "Feature Roadmap")
     tracker.add("templates", "Templates")
     tracker.add("scripts", "Scripts")
-    tracker.add("copilot", "Copilot integration")
+    tracker.add("copilot", "Copilot skills")
     tracker.add("git", "Git repository")
 
     # Check .csdd/
@@ -678,11 +678,17 @@ def check():
     else:
         tracker.error("scripts", "No scripts found")
 
-    # Check copilot integration
-    agents_dir = project_path / ".github" / "agents"
-    if agents_dir.is_dir() and any(agents_dir.glob("csdd.*.agent.md")):
-        count = len(list(agents_dir.glob("csdd.*.agent.md")))
-        tracker.complete("copilot", f"{count} agent commands found")
+    # Check copilot skills
+    skills_dir = project_path / ".github" / "skills"
+    if skills_dir.is_dir():
+        skill_count = sum(
+            1 for d in skills_dir.iterdir()
+            if d.is_dir() and d.name.startswith("csdd-") and (d / "SKILL.md").exists()
+        )
+        if skill_count > 0:
+            tracker.complete("copilot", f"{skill_count} skill commands found")
+        else:
+            tracker.skip("copilot", "No skills found")
     else:
         tracker.skip("copilot", "Not configured")
 

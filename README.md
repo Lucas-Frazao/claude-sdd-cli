@@ -103,22 +103,18 @@ my-project/
 │   │       └── setup-plan.sh
 │   └── init-options.json
 ├── .github/
-│   ├── agents/
-│   │   ├── csdd.vision.agent.md
-│   │   ├── csdd.tech-stack.agent.md
-│   │   ├── csdd.architecture.agent.md
-│   │   ├── csdd.roadmap.agent.md
-│   │   ├── csdd.specify.agent.md
-│   │   ├── csdd.plan.agent.md
-│   │   ├── csdd.tasks.agent.md
-│   │   ├── csdd.clarify.agent.md
-│   │   ├── csdd.review.agent.md
-│   │   ├── csdd.trace.agent.md
-│   │   └── csdd.constitution.agent.md
-│   ├── prompts/
-│   │   ├── csdd.specify.prompt.md
-│   │   ├── csdd.plan.prompt.md
-│   │   └── ...
+│   ├── skills/
+│   │   ├── csdd-vision/SKILL.md
+│   │   ├── csdd-tech-stack/SKILL.md
+│   │   ├── csdd-architecture/SKILL.md
+│   │   ├── csdd-roadmap/SKILL.md
+│   │   ├── csdd-specify/SKILL.md
+│   │   ├── csdd-plan/SKILL.md
+│   │   ├── csdd-tasks/SKILL.md
+│   │   ├── csdd-clarify/SKILL.md
+│   │   ├── csdd-review/SKILL.md
+│   │   ├── csdd-trace/SKILL.md
+│   │   └── csdd-constitution/SKILL.md
 │   └── copilot-instructions.md
 ├── .vscode/
 │   └── settings.json
@@ -179,7 +175,7 @@ csdd version                # Show version
 | Tasks output | Ready for an AI agent | Ready for Claude CLI |
 | Output validation | None | No-code validator on every artifact |
 | Review model | Regeneration flow | Gap analysis without code fixes |
-| Namespace | `speckit.*` | `csdd.*` |
+| Namespace | `speckit.*` | `csdd-*` |
 
 ## Why?
 
