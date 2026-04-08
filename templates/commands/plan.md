@@ -2,8 +2,8 @@
 description: Execute the implementation planning workflow using the plan template to generate design artifacts -- ALL IN PROSE, no code.
 handoffs:
   - label: Create Tasks
-    agent: hsdd.tasks
-    prompt: Break the plan into tasks for the human developer
+    agent: csdd.tasks
+    prompt: Break the plan into tasks for Claude CLI
     send: true
 scripts:
   sh: scripts/bash/setup-plan.sh --json
@@ -19,11 +19,11 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Human-Authored SDD constitution. Do NOT generate any code, code fences, or implementation snippets. All design artifacts (research.md, data-model.md, contracts/, quickstart.md) must be written entirely in prose, Markdown tables, and structured text. The human developer writes ALL code.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. Do NOT generate any code, code fences, or implementation snippets. All design artifacts (research.md, data-model.md, contracts/, quickstart.md) must be written entirely in prose, Markdown tables, and structured text. Claude CLI writes ALL code.
 
 1. **Setup**: Run `{SCRIPT}` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH.
 
-2. **Load context**: Read FEATURE_SPEC and `.hsdd/memory/constitution.md`. Load IMPL_PLAN template (already copied).
+2. **Load context**: Read FEATURE_SPEC and `.csdd/memory/constitution.md`. Load IMPL_PLAN template (already copied).
 
 3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
    - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
@@ -81,5 +81,5 @@ You **MUST** consider the user input before proceeding (if not empty).
 - ERROR on gate failures or unresolved clarifications
 - Do NOT generate any code, code fences, or implementation snippets
 - All design artifacts must be written in prose, Markdown tables, and structured text
-- The human developer writes all implementation code based on these prose artifacts
+- Claude CLI writes all implementation code based on these prose artifacts
 - Focus on WHAT needs to be built and WHY, not HOW to implement it

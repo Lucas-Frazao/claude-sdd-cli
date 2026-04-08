@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Common functions and variables for all HSDD scripts
+# Common functions and variables for all CSDD scripts
 
-# Find repository root by searching upward for .hsdd directory
-find_hsdd_root() {
+# Find repository root by searching upward for .csdd directory
+find_csdd_root() {
     local dir="${1:-$(pwd)}"
     dir="$(cd -- "$dir" 2>/dev/null && pwd)" || return 1
     local prev_dir=""
     while true; do
-        if [ -d "$dir/.hsdd" ]; then
+        if [ -d "$dir/.csdd" ]; then
             echo "$dir"
             return 0
         fi
@@ -20,11 +20,11 @@ find_hsdd_root() {
     return 1
 }
 
-# Get repository root, prioritizing .hsdd directory over git
+# Get repository root, prioritizing .csdd directory over git
 get_repo_root() {
-    local hsdd_root
-    if hsdd_root=$(find_hsdd_root); then
-        echo "$hsdd_root"
+    local csdd_root
+    if csdd_root=$(find_csdd_root); then
+        echo "$csdd_root"
         return
     fi
 
@@ -39,8 +39,8 @@ get_repo_root() {
 
 # Get current branch, with fallback for non-git repositories
 get_current_branch() {
-    if [[ -n "${HSDD_FEATURE:-}" ]]; then
-        echo "$HSDD_FEATURE"
+    if [[ -n "${CSDD_FEATURE:-}" ]]; then
+        echo "$CSDD_FEATURE"
         return
     fi
 
@@ -91,7 +91,7 @@ check_feature_branch() {
     local has_git_repo="$2"
 
     if [[ "$has_git_repo" != "true" ]]; then
-        echo "[hsdd] Warning: Git repository not detected; skipped branch validation" >&2
+        echo "[csdd] Warning: Git repository not detected; skipped branch validation" >&2
         return 0
     fi
 
@@ -198,7 +198,7 @@ check_dir() { [[ -d "$1" && -n $(ls -A "$1" 2>/dev/null) ]] && echo "  + $2" || 
 resolve_template() {
     local template_name="$1"
     local repo_root="$2"
-    local base="$repo_root/.hsdd/templates"
+    local base="$repo_root/.csdd/templates"
 
     local core="$base/${template_name}.md"
     [ -f "$core" ] && echo "$core" && return 0

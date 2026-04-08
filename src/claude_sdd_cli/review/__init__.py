@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Optional
 
-from human_sdd_cli.parsers import parse_requirements, find_open_questions
+from claude_sdd_cli.parsers import parse_requirements, find_open_questions
 
 
 def build_review_prompt(feature_dir: Path, implementation_notes: str = "") -> str:
@@ -17,7 +17,7 @@ def build_review_prompt(feature_dir: Path, implementation_notes: str = "") -> st
         Optional developer-provided description of what they implemented.
     """
     parts = [
-        "You are reviewing a human implementation against its specification and plan.",
+        "You are reviewing a Claude CLI implementation against its specification and plan.",
         "Your job is to identify gaps, contradictions, and missing requirements.",
         "You MUST NOT suggest code fixes or output any code.",
         "Produce your review as prose with sections for: gaps, contradictions, "

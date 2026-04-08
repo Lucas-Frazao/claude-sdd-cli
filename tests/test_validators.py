@@ -1,6 +1,6 @@
 """Tests for the no-code validator."""
 
-from human_sdd_cli.validators import validate_no_code
+from claude_sdd_cli.validators import validate_no_code
 
 
 class TestCodeFenceDetection:

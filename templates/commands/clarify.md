@@ -2,7 +2,7 @@
 description: Identify underspecified areas in the current feature spec by asking up to 5 highly targeted clarification questions and encoding answers back into the spec.
 handoffs:
   - label: Build Technical Plan
-    agent: hsdd.plan
+    agent: csdd.plan
     prompt: Create a plan for the spec. I am building with...
 ---
 
@@ -20,11 +20,11 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 Goal: Detect and reduce ambiguity or missing decision points in the active feature specification and record the clarifications directly in the spec file.
 
-Note: This clarification workflow is expected to run (and be completed) BEFORE invoking `/hsdd.plan`. If the user explicitly states they are skipping clarification, you may proceed, but must warn that downstream rework risk increases.
+Note: This clarification workflow is expected to run (and be completed) BEFORE invoking `/csdd.plan`. If the user explicitly states they are skipping clarification, you may proceed, but must warn that downstream rework risk increases.
 
 Execution steps:
 
-1. Locate the current feature spec file in the `specs/` directory. If no spec exists, instruct user to run `/hsdd.specify` first.
+1. Locate the current feature spec file in the `specs/` directory. If no spec exists, instruct user to run `/csdd.specify` first.
 
 2. Load the current spec file. Perform a structured ambiguity & coverage scan using this taxonomy. For each category, mark status: Clear / Partial / Missing.
 
@@ -95,10 +95,10 @@ Execution steps:
    - Path to updated spec
    - Sections touched
    - Coverage summary table
-   - Suggested next command (`/hsdd.plan`)
+   - Suggested next command (`/csdd.plan`)
 
 Behavior rules:
 - If no meaningful ambiguities found, respond: "No critical ambiguities detected." and suggest proceeding
-- If spec file missing, instruct user to run `/hsdd.specify` first
+- If spec file missing, instruct user to run `/csdd.specify` first
 - Never exceed 5 total asked questions
 - Do NOT generate any code, code fences, or implementation snippets

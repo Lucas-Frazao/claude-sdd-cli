@@ -1,5 +1,5 @@
 ---
-description: Validate that no AI-generated artifacts contain executable code, enforcing the Human Authorship mandate.
+description: Validate that no AI-generated artifacts contain executable code, enforcing the Claude CLI Implementation Mandate.
 ---
 
 ## User Input
@@ -12,7 +12,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: This command exists to enforce the foundational principle of Human-Authored SDD: AI NEVER writes code. This command scans all AI-generated artifacts and flags any violations of Article 7 (No Executable AI Output Rule).
+**CRITICAL CONSTRAINT**: This command exists to enforce the foundational principle of Claude SDD: AI NEVER writes code. This command scans all AI-generated artifacts and flags any violations of Article 7 (No Executable Planning AI Output Rule).
 
 Goal: Scan all AI-generated planning artifacts in the feature directory for code violations and report findings.
 
@@ -91,11 +91,11 @@ Execution steps:
 6. **If violations found**:
    - List specific remediation needed for each (described in prose)
    - Recommend re-running the originating command with stricter constitution enforcement
-   - Note: The human developer should review and either remove the violating content or rewrite the artifact
+   - Note: The Claude CLI should review and either remove the violating content or rewrite the artifact
 
 ## Key Rules
 
 - This command itself must NOT generate any code
 - It only produces a prose report of findings
-- Violations indicate the AI planning commands need improvement, not that the human did anything wrong
+- Violations indicate the AI planning commands need improvement, not that Claude CLI did anything wrong
 - The constitution is the source of truth for what constitutes a violation

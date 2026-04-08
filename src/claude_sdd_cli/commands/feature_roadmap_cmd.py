@@ -6,7 +6,7 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
-from human_sdd_cli.ai import AIOrchestrator
+from claude_sdd_cli.ai import AIOrchestrator
 
 console = Console()
 
@@ -19,12 +19,12 @@ console = Console()
 def feature_roadmap_cmd(description: str, path: str, model: str, no_ai: bool):
     """Define ALL features needed to realize the product vision."""
     root = Path(path).resolve()
-    hsdd_dir = root / ".hsdd"
+    csdd_dir = root / ".csdd"
 
-    if not hsdd_dir.is_dir():
-        raise click.ClickException("No .hsdd/ directory found. Run 'hsdd init' first.")
+    if not csdd_dir.is_dir():
+        raise click.ClickException("No .csdd/ directory found. Run 'csdd init' first.")
 
-    memory_dir = hsdd_dir / "memory"
+    memory_dir = csdd_dir / "memory"
     memory_dir.mkdir(parents=True, exist_ok=True)
     roadmap_path = memory_dir / "feature-roadmap.md"
 
@@ -138,7 +138,7 @@ IMPORTANT:
     console.print("     [bold]sdd clarify --feature 001-...[/]")
     console.print("     [bold]sdd plan --feature 001-...[/]")
     console.print("     [bold]sdd tasks --feature 001-...[/]")
-    console.print("     Then YOU CODE the feature")
+    console.print("     Then CLAUDE CLI IMPLEMENTS the feature")
     console.print("     [bold]sdd review --feature 001-...[/]")
 
 

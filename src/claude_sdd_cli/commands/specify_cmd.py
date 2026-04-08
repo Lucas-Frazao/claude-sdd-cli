@@ -7,9 +7,9 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
-from human_sdd_cli.ai import AIOrchestrator
-from human_sdd_cli.templates import load_template, populate_template
-from human_sdd_cli.validators import validate_no_code
+from claude_sdd_cli.ai import AIOrchestrator
+from claude_sdd_cli.templates import load_template, populate_template
+from claude_sdd_cli.validators import validate_no_code
 
 console = Console()
 

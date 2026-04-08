@@ -1,4 +1,4 @@
-"""sdd tasks — Create a human execution checklist from planning artifacts."""
+"""sdd tasks — Create a Claude CLI execution checklist from planning artifacts."""
 
 from pathlib import Path
 
@@ -6,8 +6,8 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
-from human_sdd_cli.ai import AIOrchestrator
-from human_sdd_cli.parsers import load_feature_artifact
+from claude_sdd_cli.ai import AIOrchestrator
+from claude_sdd_cli.parsers import load_feature_artifact
 
 console = Console()
 
@@ -29,7 +29,7 @@ def _find_feature_dir(root: Path, feature: str) -> Path:
 @click.option("--model", "-m", default="gpt-4o-mini", help="LLM model to use.")
 @click.option("--no-ai", is_flag=True, help="Skip AI, create blank template only.")
 def tasks_cmd(feature: str, path: str, model: str, no_ai: bool):
-    """Generate a human execution checklist from planning artifacts."""
+    """Generate a Claude CLI execution checklist from planning artifacts."""
     root = Path(path).resolve()
     feature_dir = _find_feature_dir(root, feature)
 
@@ -64,8 +64,7 @@ def tasks_cmd(feature: str, path: str, model: str, no_ai: bool):
         console.print("[dim]Generating task breakdown...[/]")
         ai = AIOrchestrator(model=model, audit_dir=feature_dir)
 
-        prompt = f"""Based on the following planning artifacts, create a detailed human
-implementation checklist.
+        prompt = f"""Based on the following planning artifacts, create a detailed implementation checklist for Claude CLI.
 
 ARTIFACTS:
 {artifacts_text}
@@ -110,6 +109,12 @@ IMPORTANT RULES:
 - Flag tasks that can be done in parallel with a [PARALLEL] marker
 - Keep tasks concrete and actionable
 - Do NOT suggest any code, commands, or executable content
+
+## Claude CLI Implementation Notes
+(Context and guidance for Claude CLI to implement these tasks effectively)
+- Include specific file paths where code should be written
+- Reference the requirement each task fulfills
+- Note key context from the spec/plan that Claude CLI needs
 """
         try:
             content = ai.generate(prompt, feature=feature_dir.name)
@@ -124,7 +129,7 @@ IMPORTANT RULES:
     console.print()
     console.print("[bold green]Task breakdown created.[/] Next steps:")
     console.print(f"  1. Review: {tasks_path.relative_to(root)}")
-    console.print("  2. Start implementing — you write the code!")
+    console.print("  2. Send tasks to Claude CLI for implementation")
     console.print(f"  3. After implementing, run [bold]sdd review --feature {feature_dir.name}[/]")
 
 

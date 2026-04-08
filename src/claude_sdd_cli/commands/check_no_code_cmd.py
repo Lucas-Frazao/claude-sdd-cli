@@ -7,7 +7,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from human_sdd_cli.validators import validate_no_code
+from claude_sdd_cli.validators import validate_no_code
 
 console = Console()
 

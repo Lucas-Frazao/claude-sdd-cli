@@ -3,7 +3,7 @@
 import tempfile
 from pathlib import Path
 
-from human_sdd_cli.tracing import build_trace_report
+from claude_sdd_cli.tracing import build_trace_report
 
 
 class TestTraceReport:

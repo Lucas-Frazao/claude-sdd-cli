@@ -1,16 +1,16 @@
-"""Human-Authored Specification-Driven Development CLI.
+"""Claude SDD -- Specification-Driven Development CLI.
 
-AI plans, you code. A planning copilot that helps you write specs, plans, and tasks --
-while YOU write every line of code.
+AI plans (via Copilot), Claude codes. A planning copilot that helps you write specs,
+plans, and tasks -- then Claude CLI implements them.
 
 Usage:
-    hsdd init <project-name>
-    hsdd init --here
-    hsdd check
+    csdd init <project-name>
+    csdd init --here
+    csdd check
 
 Or install globally:
-    uv tool install human-sdd-cli --from git+https://github.com/Lucas-Frazao/human-sdd-cli.git
-    hsdd init my-project
+    uv tool install claude-sdd-cli --from git+https://github.com/Lucas-Frazao/claude-sdd-cli.git
+    csdd init my-project
 """
 
 from __future__ import annotations
@@ -38,15 +38,15 @@ import readchar
 __version__ = "0.2.0"
 
 BANNER = """
-██╗  ██╗███████╗██████╗ ██████╗
-██║  ██║██╔════╝██╔══██╗██╔══██╗
-███████║███████╗██║  ██║██║  ██║
-██╔══██║╚════██║██║  ██║██║  ██║
-██║  ██║███████║██████╔╝██████╔╝
-╚═╝  ╚═╝╚══════╝╚═════╝ ╚═════╝
+ ██████╗███████╗██████╗ ██████╗
+██╔════╝██╔════╝██╔══██╗██╔══██╗
+██║     ███████╗██║  ██║██║  ██║
+██║     ╚════██║██║  ██║██║  ██║
+╚██████╗███████║██████╔╝██████╔╝
+ ╚═════╝╚══════╝╚═════╝ ╚═════╝
 """
 
-TAGLINE = "Human-Authored SDD -- AI Plans, You Code"
+TAGLINE = "Claude SDD -- AI Plans, Claude Codes"
 
 AI_ASSISTANTS = {
     "copilot": "GitHub Copilot (VS Code)",
@@ -227,8 +227,8 @@ class BannerGroup(TyperGroup):
 
 
 app = typer.Typer(
-    name="hsdd",
-    help="Human-Authored SDD CLI -- AI plans, you code.",
+    name="csdd",
+    help="Claude SDD CLI -- AI plans, Claude codes.",
     add_completion=False,
     invoke_without_command=True,
     cls=BannerGroup,
@@ -255,7 +255,7 @@ def callback(ctx: typer.Context):
     """Show banner when no subcommand is provided."""
     if ctx.invoked_subcommand is None and "--help" not in sys.argv and "-h" not in sys.argv:
         show_banner()
-        console.print(Align.center("[dim]Run 'hsdd --help' for usage information[/dim]"))
+        console.print(Align.center("[dim]Run 'csdd --help' for usage information[/dim]"))
         console.print()
 
 
@@ -276,12 +276,12 @@ def _locate_source_root() -> Path | None:
 
 
 def _install_shared_infra(project_path: Path, tracker: StepTracker) -> None:
-    """Copy .hsdd/scripts/ and .hsdd/templates/ to the project."""
-    hsdd_dir = project_path / ".hsdd"
+    """Copy .csdd/scripts/ and .csdd/templates/ to the project."""
+    csdd_dir = project_path / ".csdd"
 
     # Copy scripts
     tracker.start("scripts", "Copying shell scripts")
-    scripts_dest = hsdd_dir / "scripts" / "bash"
+    scripts_dest = csdd_dir / "scripts" / "bash"
     scripts_dest.mkdir(parents=True, exist_ok=True)
 
     core_pack = _locate_core_pack()
@@ -305,7 +305,7 @@ def _install_shared_infra(project_path: Path, tracker: StepTracker) -> None:
 
     # Copy templates
     tracker.start("templates", "Copying templates")
-    templates_dest = hsdd_dir / "templates"
+    templates_dest = csdd_dir / "templates"
     templates_dest.mkdir(parents=True, exist_ok=True)
 
     if core_pack:
@@ -333,9 +333,9 @@ def _ensure_executable_scripts(scripts_dir: Path) -> None:
 
 
 def _ensure_constitution(project_path: Path, project_name: str, tracker: StepTracker) -> None:
-    """Copy constitution template to .hsdd/memory/constitution.md."""
+    """Copy constitution template to .csdd/memory/constitution.md."""
     tracker.start("constitution", "Setting up constitution")
-    memory_dir = project_path / ".hsdd" / "memory"
+    memory_dir = project_path / ".csdd" / "memory"
     memory_dir.mkdir(parents=True, exist_ok=True)
 
     constitution_path = memory_dir / "constitution.md"
@@ -376,14 +376,16 @@ def _default_constitution(name: str) -> str:
 Every feature begins with a structured specification before implementation starts.
 Requirements, user stories, edge cases, and success criteria are defined first.
 
-## Article 2: Human Authorship Mandate
-All executable project artifacts must be authored by the human developer.
-AI may not generate implementation code, test code, infrastructure code,
-migration code, build scripts, configuration code, or any other executable artifact.
+## Article 2: Claude CLI Implementation Mandate
+All executable project artifacts must be implemented via Claude CLI.
+The planning AI (Copilot) may not generate implementation code, test code,
+infrastructure code, migration code, build scripts, configuration code,
+or any other executable artifact. Claude CLI is the sole implementer.
 
-## Article 3: AI Planning-Only Mandate
-AI participation is restricted to requirement clarification, research, planning,
-task decomposition, review commentary, consistency checking, and traceability support.
+## Article 3: AI Planning-Only Mandate (Copilot)
+The planning AI (Copilot) participation is restricted to requirement clarification,
+research, planning, task decomposition, review commentary, consistency checking,
+and traceability support. Copilot must not generate code.
 
 ## Article 4: Ambiguity Marking Requirement
 When requirements are ambiguous or underspecified, the system must mark them with
@@ -397,9 +399,10 @@ a requirement, contract, or planning decision.
 The tool emphasizes validation, consistency checking, and review.
 When gaps are found, the output is follow-up tasks and questions -- not code patches.
 
-## Article 7: No Executable AI Output Rule
-Any AI-generated artifact containing executable code, code fences with implementation
-content, or copy-paste-ready source/config/test content must be rejected or quarantined.
+## Article 7: No Executable Planning AI Output Rule
+Any planning AI (Copilot) artifact containing executable code, code fences with
+implementation content, or copy-paste-ready source/config/test content must be
+rejected or quarantined. Tasks are intended for Claude CLI to implement.
 
 ## Article 8: Transparency and Auditability
 Prompt and response history is preserved for review. Every planning decision
@@ -433,7 +436,7 @@ def init_git_repo(project_path: Path, quiet: bool = False) -> Tuple[bool, Option
         subprocess.run(["git", "init"], check=True, capture_output=True, text=True)
         subprocess.run(["git", "add", "."], check=True, capture_output=True, text=True)
         subprocess.run(
-            ["git", "commit", "-m", "Initial commit from HSDD template"],
+            ["git", "commit", "-m", "Initial commit from CSDD template"],
             check=True,
             capture_output=True,
             text=True,
@@ -449,8 +452,8 @@ def init_git_repo(project_path: Path, quiet: bool = False) -> Tuple[bool, Option
 
 
 def _save_init_options(project_path: Path, options: dict) -> None:
-    """Persist init CLI options in .hsdd/init-options.json."""
-    init_options_path = project_path / ".hsdd" / "init-options.json"
+    """Persist init CLI options in .csdd/init-options.json."""
+    init_options_path = project_path / ".csdd" / "init-options.json"
     init_options_path.write_text(
         json.dumps(options, indent=2) + "\n", encoding="utf-8"
     )
@@ -463,7 +466,7 @@ def init(
     ai: str = typer.Option(None, "--ai", help="AI assistant to use (copilot)"),
     no_git: bool = typer.Option(False, "--no-git", help="Skip git initialization"),
 ):
-    """Initialize a new Human-Authored SDD project."""
+    """Initialize a new Claude SDD project."""
     # Resolve project path
     if here or project_name == ".":
         project_path = Path.cwd()
@@ -490,8 +493,8 @@ def init(
     project_path.mkdir(parents=True, exist_ok=True)
 
     # Set up the step tracker
-    tracker = StepTracker("Initializing HSDD project")
-    tracker.add("dirs", "Create .hsdd/ directory structure")
+    tracker = StepTracker("Initializing CSDD project")
+    tracker.add("dirs", "Create .csdd/ directory structure")
     tracker.add("scripts", "Install shell scripts")
     tracker.add("templates", "Install templates")
     tracker.add("constitution", "Set up constitution")
@@ -503,11 +506,11 @@ def init(
     with Live(tracker.render(), console=console, transient=False, auto_refresh=False) as live:
         tracker.attach_refresh(lambda: live.update(tracker.render(), refresh=True))
 
-        # 1. Create .hsdd/ directory structure
+        # 1. Create .csdd/ directory structure
         tracker.start("dirs", "Creating directories")
-        hsdd_dir = project_path / ".hsdd"
+        csdd_dir = project_path / ".csdd"
         for subdir in ["memory", "templates", "scripts/bash"]:
-            (hsdd_dir / subdir).mkdir(parents=True, exist_ok=True)
+            (csdd_dir / subdir).mkdir(parents=True, exist_ok=True)
         (project_path / "specs").mkdir(parents=True, exist_ok=True)
         tracker.complete("dirs", "Created")
 
@@ -520,7 +523,7 @@ def init(
         # 4. Integration setup
         tracker.start("integration", f"Setting up {ai}")
         if ai == "copilot":
-            from human_sdd_cli.integrations.copilot import CopilotIntegration
+            from claude_sdd_cli.integrations.copilot import CopilotIntegration
 
             integration = CopilotIntegration()
             created_files = integration.setup(project_path)
@@ -558,14 +561,14 @@ def init(
     if ai == "copilot":
         next_steps.add_row("1.", "Open the project in VS Code")
         next_steps.add_row("2.", "Open Copilot Chat")
-        next_steps.add_row("3.", "Type: /hsdd.vision to define your product vision")
-        next_steps.add_row("4.", "Type: /hsdd.roadmap to define your feature roadmap")
-        next_steps.add_row("5.", "For each feature: specify -> clarify -> plan -> tasks -> YOU CODE -> review")
+        next_steps.add_row("3.", "Type: /csdd.vision to define your product vision")
+        next_steps.add_row("4.", "Type: /csdd.roadmap to define your feature roadmap")
+        next_steps.add_row("5.", "For each feature: specify -> clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review")
     else:
-        next_steps.add_row("1.", "Review .hsdd/memory/constitution.md")
-        next_steps.add_row("2.", "Run: hsdd vision --description 'your product idea'")
-        next_steps.add_row("3.", "Run: hsdd roadmap")
-        next_steps.add_row("4.", "For each feature: hsdd specify -> clarify -> plan -> tasks -> YOU CODE -> review")
+        next_steps.add_row("1.", "Review .csdd/memory/constitution.md")
+        next_steps.add_row("2.", "Run: csdd vision --description 'your product idea'")
+        next_steps.add_row("3.", "Run: csdd roadmap")
+        next_steps.add_row("4.", "For each feature: csdd specify -> clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review")
 
     console.print(Panel(
         next_steps,
@@ -582,12 +585,12 @@ def integrate(
     """Set up or re-run an AI assistant integration."""
     project_path = Path.cwd()
 
-    if not (project_path / ".hsdd").is_dir():
-        console.print("[red]No .hsdd/ directory found. Run 'hsdd init' first.[/red]")
+    if not (project_path / ".csdd").is_dir():
+        console.print("[red]No .csdd/ directory found. Run 'csdd init' first.[/red]")
         raise typer.Exit(1)
 
     if ai == "copilot":
-        from human_sdd_cli.integrations.copilot import CopilotIntegration
+        from claude_sdd_cli.integrations.copilot import CopilotIntegration
 
         integration = CopilotIntegration()
         created = integration.setup(project_path)
@@ -605,30 +608,30 @@ def check():
     """Verify project setup and installed tools."""
     project_path = Path.cwd()
 
-    console.print("[bold]Checking HSDD project setup...[/bold]\n")
+    console.print("[bold]Checking CSDD project setup...[/bold]\n")
 
     tracker = StepTracker("Project Check")
-    tracker.add("hsdd_dir", ".hsdd/ directory")
+    tracker.add("csdd_dir", ".csdd/ directory")
     tracker.add("constitution", "Constitution")
     tracker.add("templates", "Templates")
     tracker.add("scripts", "Scripts")
     tracker.add("copilot", "Copilot integration")
     tracker.add("git", "Git repository")
 
-    # Check .hsdd/
-    if (project_path / ".hsdd").is_dir():
-        tracker.complete("hsdd_dir", "Found")
+    # Check .csdd/
+    if (project_path / ".csdd").is_dir():
+        tracker.complete("csdd_dir", "Found")
     else:
-        tracker.error("hsdd_dir", "Not found -- run 'hsdd init'")
+        tracker.error("csdd_dir", "Not found -- run 'csdd init'")
 
     # Check constitution
-    if (project_path / ".hsdd" / "memory" / "constitution.md").is_file():
+    if (project_path / ".csdd" / "memory" / "constitution.md").is_file():
         tracker.complete("constitution", "Found")
     else:
         tracker.error("constitution", "Not found")
 
     # Check templates
-    templates_dir = project_path / ".hsdd" / "templates"
+    templates_dir = project_path / ".csdd" / "templates"
     if templates_dir.is_dir() and any(templates_dir.glob("*.md")):
         count = len(list(templates_dir.glob("*.md")))
         tracker.complete("templates", f"{count} templates found")
@@ -636,7 +639,7 @@ def check():
         tracker.error("templates", "No templates found")
 
     # Check scripts
-    scripts_dir = project_path / ".hsdd" / "scripts" / "bash"
+    scripts_dir = project_path / ".csdd" / "scripts" / "bash"
     if scripts_dir.is_dir() and any(scripts_dir.glob("*.sh")):
         count = len(list(scripts_dir.glob("*.sh")))
         tracker.complete("scripts", f"{count} scripts found")
@@ -645,8 +648,8 @@ def check():
 
     # Check copilot integration
     agents_dir = project_path / ".github" / "agents"
-    if agents_dir.is_dir() and any(agents_dir.glob("hsdd.*.agent.md")):
-        count = len(list(agents_dir.glob("hsdd.*.agent.md")))
+    if agents_dir.is_dir() and any(agents_dir.glob("csdd.*.agent.md")):
+        count = len(list(agents_dir.glob("csdd.*.agent.md")))
         tracker.complete("copilot", f"{count} agent commands found")
     else:
         tracker.skip("copilot", "Not configured")
@@ -663,8 +666,8 @@ def check():
 @app.command()
 def version():
     """Display version information."""
-    console.print(f"[bold]hsdd[/bold] v{__version__}")
-    console.print("[dim]Human-Authored Specification-Driven Development CLI[/dim]")
+    console.print(f"[bold]csdd[/bold] v{__version__}")
+    console.print("[dim]Claude SDD -- Specification-Driven Development CLI[/dim]")
 
 
 def main():

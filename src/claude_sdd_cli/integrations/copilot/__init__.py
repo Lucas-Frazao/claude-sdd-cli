@@ -37,11 +37,11 @@ class CopilotIntegration:
 
     def command_filename(self, template_name: str) -> str:
         """Copilot commands use ``.agent.md`` extension."""
-        return f"hsdd.{template_name}.agent.md"
+        return f"csdd.{template_name}.agent.md"
 
     def prompt_filename(self, template_name: str) -> str:
         """Companion prompt file name."""
-        return f"hsdd.{template_name}.prompt.md"
+        return f"csdd.{template_name}.prompt.md"
 
     def _locate_commands_dir(self) -> Path | None:
         """Find the command templates directory.
@@ -86,16 +86,16 @@ class CopilotIntegration:
         """Process a command template for Copilot agent format.
 
         - Strip script blocks from frontmatter
-        - Replace path references to use .hsdd/ prefix
+        - Replace path references to use .csdd/ prefix
         - Replace {ARGS} with $ARGUMENTS
         """
-        # Replace relative path references to use .hsdd/ prefix
-        content = re.sub(r'(?m)^(scripts/)', r'.hsdd/scripts/', content)
-        content = re.sub(r'(?m)^(templates/)', r'.hsdd/templates/', content)
-        content = re.sub(r'(?m)^(memory/)', r'.hsdd/memory/', content)
-        content = content.replace('../../memory/', '.hsdd/memory/')
-        content = content.replace('../../scripts/', '.hsdd/scripts/')
-        content = content.replace('../../templates/', '.hsdd/templates/')
+        # Replace relative path references to use .csdd/ prefix
+        content = re.sub(r'(?m)^(scripts/)', r'.csdd/scripts/', content)
+        content = re.sub(r'(?m)^(templates/)', r'.csdd/templates/', content)
+        content = re.sub(r'(?m)^(memory/)', r'.csdd/memory/', content)
+        content = content.replace('../../memory/', '.csdd/memory/')
+        content = content.replace('../../scripts/', '.csdd/scripts/')
+        content = content.replace('../../templates/', '.csdd/templates/')
 
         # Replace {ARGS} placeholder
         content = content.replace('{ARGS}', '$ARGUMENTS')
@@ -133,7 +133,7 @@ class CopilotIntegration:
         prompts_dir = project_root / ".github" / "prompts"
         prompts_dir.mkdir(parents=True, exist_ok=True)
         for src_file in templates:
-            cmd_name = f"hsdd.{src_file.stem}"
+            cmd_name = f"csdd.{src_file.stem}"
             prompt_content = f"---\nagent: {cmd_name}\n---\n"
             prompt_file = prompts_dir / f"{cmd_name}.prompt.md"
             prompt_file.write_text(prompt_content, encoding="utf-8")
@@ -212,12 +212,13 @@ class CopilotIntegration:
         project_name = project_root.name
         return f"""# Copilot Instructions -- {project_name}
 
-This project follows **Human-Authored Specification-Driven Development (HSDD)**.
+This project follows **Claude SDD (Specification-Driven Development)**.
 
-## Core Principle: AI Plans, Human Codes
+## Core Principle: Copilot Plans, Claude CLI Codes
 
 You (the AI assistant) are a **planning copilot**. You help the developer think
 through requirements, identify ambiguity, structure plans, and review work.
+Implementation tasks are sent to Claude CLI.
 
 **You MUST NOT generate any executable code.** This includes:
 - No code in any programming language
@@ -237,39 +238,39 @@ through requirements, identify ambiguity, structure plans, and review work.
 
 The recommended workflow is:
 
-1. `/hsdd.constitution` -- Define project principles (done during init)
-2. `/hsdd.vision` -- Define the product vision
-3. `/hsdd.roadmap` -- Define ALL features needed to realize the product
+1. `/csdd.constitution` -- Define project principles (done during init)
+2. `/csdd.vision` -- Define the product vision
+3. `/csdd.roadmap` -- Define ALL features needed to realize the product
 4. For EACH feature from the roadmap:
-   - `/hsdd.specify` -- Create a feature specification
-   - `/hsdd.clarify` -- Find ambiguity and contradictions
-   - `/hsdd.plan` -- Generate a technical planning package
-   - `/hsdd.tasks` -- Create a human execution checklist
-   - YOU CODE the feature
-   - `/hsdd.review` -- Compare implementation against spec
-   - `/hsdd.trace` -- Map requirements to tasks
+   - `/csdd.specify` -- Create a feature specification
+   - `/csdd.clarify` -- Find ambiguity and contradictions
+   - `/csdd.plan` -- Generate a technical planning package
+   - `/csdd.tasks` -- Create a human execution checklist
+   - CLAUDE CLI IMPLEMENTS the feature
+   - `/csdd.review` -- Compare implementation against spec
+   - `/csdd.trace` -- Map requirements to tasks
 
 ## Available Commands
 
 Use these commands in Copilot Chat:
 
-- `/hsdd.vision` -- Define the product vision (what, who, why)
-- `/hsdd.roadmap` -- Define ALL features needed to realize the product
-- `/hsdd.specify` -- Create a feature specification from a natural language description
-- `/hsdd.plan` -- Generate a technical planning package (prose only)
-- `/hsdd.tasks` -- Create a human execution checklist
-- `/hsdd.clarify` -- Find ambiguity and contradictions in specs
-- `/hsdd.review` -- Compare implementation against spec
-- `/hsdd.trace` -- Map requirements to tasks and check coverage
-- `/hsdd.check-no-code` -- Validate no AI code leaked into artifacts
-- `/hsdd.constitution` -- Create or update the project constitution
+- `/csdd.vision` -- Define the product vision (what, who, why)
+- `/csdd.roadmap` -- Define ALL features needed to realize the product
+- `/csdd.specify` -- Create a feature specification from a natural language description
+- `/csdd.plan` -- Generate a technical planning package (prose only)
+- `/csdd.tasks` -- Create a human execution checklist
+- `/csdd.clarify` -- Find ambiguity and contradictions in specs
+- `/csdd.review` -- Compare implementation against spec
+- `/csdd.trace` -- Map requirements to tasks and check coverage
+- `/csdd.check-no-code` -- Validate no AI code leaked into artifacts
+- `/csdd.constitution` -- Create or update the project constitution
 
 ## Project Structure
 
-- `.hsdd/memory/constitution.md` -- Project constitution (8 articles)
-- `.hsdd/memory/product-vision.md` -- Product vision document
-- `.hsdd/memory/feature-roadmap.md` -- Feature roadmap
-- `.hsdd/templates/` -- Markdown templates for specs, plans, tasks, etc.
+- `.csdd/memory/constitution.md` -- Project constitution (8 articles)
+- `.csdd/memory/product-vision.md` -- Product vision document
+- `.csdd/memory/feature-roadmap.md` -- Feature roadmap
+- `.csdd/templates/` -- Markdown templates for specs, plans, tasks, etc.
 - `specs/` -- Feature specifications and planning artifacts
 - `.github/agents/` -- Copilot agent command files
 - `.github/prompts/` -- Companion prompt files
@@ -277,11 +278,11 @@ Use these commands in Copilot Chat:
 ## The 8 Articles
 
 1. Specification-First Principle
-2. Human Authorship Mandate
+2. Claude CLI Implementation Mandate
 3. AI Planning-Only Mandate
 4. Ambiguity Marking Requirement
 5. Traceability Requirement
 6. Review-Before-Regeneration Principle
-7. No Executable AI Output Rule
+7. No Executable Planning AI Output Rule
 8. Transparency and Auditability
 """

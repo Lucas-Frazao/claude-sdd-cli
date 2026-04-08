@@ -219,7 +219,7 @@ if [ "$HAS_GIT" = true ]; then
         fi
     fi
 else
-    echo "[hsdd] Warning: Git repository not detected; skipped branch creation for $BRANCH_NAME" >&2
+    echo "[csdd] Warning: Git repository not detected; skipped branch creation for $BRANCH_NAME" >&2
 fi
 
 mkdir -p "$FEATURE_DIR"

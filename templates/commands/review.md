@@ -1,5 +1,5 @@
 ---
-description: Compare the human developer's implementation against the feature specification and produce a gap analysis with follow-up tasks.
+description: Compare the Claude CLI's implementation against the feature specification and produce a gap analysis with follow-up tasks.
 ---
 
 ## User Input
@@ -12,9 +12,9 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI review assistant operating under the Human-Authored SDD constitution. Do NOT generate any code, code fences, code patches, or implementation fixes. The output of this review is follow-up TASKS and QUESTIONS -- never code. The human developer writes all fixes.
+**CRITICAL CONSTRAINT**: You are an AI review assistant operating under the Claude SDD constitution. Do NOT generate any code, code fences, code patches, or implementation fixes. The output of this review is follow-up TASKS and QUESTIONS -- never code. Claude CLI writes all fixes.
 
-Goal: Compare the human developer's implementation against the approved specification, identify gaps, contradictions, and uncovered requirements, and produce a structured review report with actionable follow-up tasks.
+Goal: Compare the Claude CLI's implementation against the approved specification, identify gaps, contradictions, and uncovered requirements, and produce a structured review report with actionable follow-up tasks.
 
 Execution steps:
 
@@ -22,7 +22,7 @@ Execution steps:
    - **Required**: spec.md (the source of truth)
    - **Required**: The implementation files (user should specify which files/directories to review)
    - **Optional**: plan.md, data-model.md, contracts/, tasks.md
-   - Load `.hsdd/memory/constitution.md` for compliance checking
+   - Load `.csdd/memory/constitution.md` for compliance checking
 
 2. **Requirement Coverage Analysis**: For each functional requirement (REQ-XXX) in the spec:
    - Determine if the requirement is: COVERED, PARTIALLY COVERED, or NOT COVERED
@@ -47,7 +47,7 @@ Execution steps:
 
 6. **Generate Review Report** at `FEATURE_DIR/review.md`:
 
-   Structure the report using `.hsdd/templates/review-template.md`:
+   Structure the report using `.csdd/templates/review-template.md`:
    - **Requirement Coverage Table**: REQ-ID | Status | Evidence | Notes
    - **Gaps Found**: List of uncovered or partially covered requirements
    - **Contradictions**: List of spec-vs-implementation conflicts
@@ -59,7 +59,7 @@ Execution steps:
    - Path to review.md
    - Summary: X of Y requirements covered, Z gaps found, N contradictions
    - Follow-up task count
-   - Recommendation: address gaps then re-run `/hsdd.review`, or proceed to `/hsdd.trace`
+   - Recommendation: address gaps then re-run `/csdd.review`, or proceed to `/csdd.trace`
 
 ## Key Rules
 
@@ -67,5 +67,5 @@ Execution steps:
 - Do NOT show how to fix issues -- only describe WHAT is wrong and WHAT needs to change
 - Follow-up tasks use the same TASK-NNN format with requirement traces
 - All output is prose, tables, and checklists
-- The human developer decides how to fix every issue
+- Claude CLI decides how to fix every issue
 - Focus on WHAT is missing or wrong, not HOW to fix it

@@ -1,6 +1,6 @@
 """Tests for the markdown artifact parsers."""
 
-from human_sdd_cli.parsers import (
+from claude_sdd_cli.parsers import (
     parse_requirements,
     parse_tasks,
     find_open_questions,

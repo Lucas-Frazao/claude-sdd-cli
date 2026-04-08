@@ -6,8 +6,8 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
-from human_sdd_cli.ai import AIOrchestrator
-from human_sdd_cli.review import build_review_prompt
+from claude_sdd_cli.ai import AIOrchestrator
+from claude_sdd_cli.review import build_review_prompt
 
 console = Console()
 
@@ -30,7 +30,7 @@ def _find_feature_dir(root: Path, feature: str) -> Path:
 @click.option("--path", "-p", default=".", help="Project root directory.")
 @click.option("--model", "-m", default="gpt-4o-mini", help="LLM model to use.")
 def review_cmd(feature: str, notes: str, notes_file: str, path: str, model: str):
-    """Review human-written implementation against the spec and plan."""
+    """Review Claude CLI implementation against the spec and plan."""
     root = Path(path).resolve()
     feature_dir = _find_feature_dir(root, feature)
 

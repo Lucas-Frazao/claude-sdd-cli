@@ -1,5 +1,5 @@
 ---
-description: Generate an actionable, dependency-ordered tasks.md checklist for the HUMAN developer based on available design artifacts.
+description: Generate an actionable, dependency-ordered tasks.md checklist for Claude CLI based on available design artifacts.
 ---
 
 ## User Input
@@ -12,7 +12,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant. The tasks you generate are for the HUMAN developer to implement. Do NOT generate any code, code fences, or implementation snippets. Each task describes WHAT to implement and WHERE, not HOW. The human writes every line of code.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant. The tasks you generate are for Claude CLI to implement. Do NOT generate any code, code fences, or implementation snippets. Each task describes WHAT to implement and WHERE, not HOW. Claude CLI writes every line of code.
 
 1. **Load design documents**: Read from the feature directory:
    - **Required**: plan.md (technical direction), spec.md (user stories with priorities)
@@ -28,7 +28,7 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Generate dependency graph showing completion order
    - Validate task completeness (each user story has all needed tasks)
 
-3. **Generate tasks.md**: Use `.hsdd/templates/tasks-template.md` as structure, fill with:
+3. **Generate tasks.md**: Use `.csdd/templates/tasks-template.md` as structure, fill with:
    - Correct feature name from plan.md
    - Phase 1: Setup tasks (project initialization)
    - Phase 2: Data model tasks (if applicable)
@@ -36,7 +36,7 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Phase 4: Integration tasks
    - Phase 5: Validation tasks (what to test, not how)
    - Phase 6: Documentation tasks
-   - Phase 7: Review tasks (run `hsdd review`)
+   - Phase 7: Review tasks (run `csdd review`)
    - All tasks must follow the strict checklist format (see below)
    - Clear file paths for each task
    - Requirement traceability (traces: REQ-XXX)
@@ -49,7 +49,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Task Generation Rules
 
-**CRITICAL**: Tasks are for the HUMAN developer. They describe WHAT to build, not HOW.
+**CRITICAL**: Tasks are for Claude CLI. They describe WHAT to build, not HOW.
 
 ### Checklist Format (REQUIRED)
 
@@ -102,4 +102,4 @@ Every task MUST strictly follow this format:
 Between major phases, include validation checkpoint tasks:
 - `- [ ] TASK-NNN: Validate Phase X outputs against spec requirements (traces: REQ-XXX)`
 
-These remind the developer to check their work against the spec before proceeding.
+These remind Claude CLI to check work against the spec before proceeding.

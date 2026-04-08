@@ -1,4 +1,4 @@
-# Contributing to Human-Authored SDD CLI
+# Contributing to Claude SDD CLI
 
 Thank you for your interest in contributing. This project welcomes contributions from everyone.
 
@@ -24,8 +24,8 @@ Thank you for your interest in contributing. This project welcomes contributions
 ### Development Setup
 
 ```
-git clone https://github.com/<your-fork>/human-sdd-cli.git
-cd human-sdd-cli
+git clone https://github.com/<your-fork>/claude-sdd-cli.git
+cd claude-sdd-cli
 pip install -e ".[dev]"
 pytest
 ```
@@ -38,7 +38,7 @@ See [DEVELOPMENT.md](DEVELOPMENT.md) for more detail.
 - New validator patterns for the no-code detector.
 - Improved templates that make planning artifacts clearer.
 - Documentation improvements.
-- New CLI commands that fit the spec-first, human-authored philosophy.
+- New CLI commands that fit the spec-first, Claude SDD philosophy.
 
 ### What This Project Will Not Accept
 

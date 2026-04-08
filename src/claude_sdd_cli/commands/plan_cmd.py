@@ -6,8 +6,8 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
-from human_sdd_cli.ai import AIOrchestrator
-from human_sdd_cli.parsers import load_feature_artifact, find_open_questions
+from claude_sdd_cli.ai import AIOrchestrator
+from claude_sdd_cli.parsers import load_feature_artifact, find_open_questions
 
 console = Console()
 
@@ -129,8 +129,8 @@ Do NOT include any code, code fences, or executable content.
 ## Validation Approach
 (How the developer will verify the implementation works)
 
-## Human Implementation Guidance
-(High-level guidance for the developer — what to build first, key decisions to make)
+## Claude CLI Implementation Guidance
+(High-level guidance for Claude CLI — what to build first, key decisions to make)
 """
     try:
         plan_content = ai.generate(plan_prompt, feature=feature_dir.name)

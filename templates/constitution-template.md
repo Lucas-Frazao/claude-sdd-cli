@@ -4,13 +4,14 @@
 Every feature begins with a structured specification before implementation starts.
 Requirements, user stories, edge cases, and success criteria are defined first.
 
-## Article 2: Human Authorship Mandate
-All executable project artifacts must be authored by the human developer.
-AI may not generate implementation code, test code, infrastructure code,
+## Article 2: Claude CLI Implementation Mandate
+All executable project artifacts must be implemented via Claude CLI.
+The planning AI (Copilot) may not generate implementation code, test code, infrastructure code,
 migration code, build scripts, configuration code, or any other executable artifact.
+Claude CLI is the sole implementer.
 
 ## Article 3: AI Planning-Only Mandate
-AI participation is restricted to requirement clarification, research, planning,
+The planning AI (Copilot) participation is restricted to requirement clarification, research, planning,
 task decomposition, review commentary, consistency checking, and traceability support.
 
 ## Article 4: Ambiguity Marking Requirement
@@ -25,9 +26,10 @@ a requirement, contract, or planning decision.
 The tool emphasizes validation, consistency checking, and review.
 When gaps are found, the output is follow-up tasks and questions — not code patches.
 
-## Article 7: No Executable AI Output Rule
-Any AI-generated artifact containing executable code, code fences with implementation
+## Article 7: No Executable Planning AI Output Rule
+Any planning AI (Copilot) artifact containing executable code, code fences with implementation
 content, or copy-paste-ready source/config/test content must be rejected or quarantined.
+Tasks are intended for Claude CLI to implement.
 
 ## Article 8: Transparency and Auditability
 Prompt and response history is preserved for review. Every planning decision

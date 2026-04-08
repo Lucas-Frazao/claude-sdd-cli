@@ -6,7 +6,7 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
-from human_sdd_cli.tracing import build_trace_report
+from claude_sdd_cli.tracing import build_trace_report
 
 console = Console()
 

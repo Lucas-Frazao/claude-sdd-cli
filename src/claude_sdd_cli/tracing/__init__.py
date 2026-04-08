@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from human_sdd_cli.parsers import parse_requirements, parse_tasks, Requirement, Task
+from claude_sdd_cli.parsers import parse_requirements, parse_tasks, Requirement, Task
 
 
 @dataclass

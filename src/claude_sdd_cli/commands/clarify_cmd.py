@@ -7,8 +7,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from human_sdd_cli.ai import AIOrchestrator
-from human_sdd_cli.parsers import find_open_questions
+from claude_sdd_cli.ai import AIOrchestrator
+from claude_sdd_cli.parsers import find_open_questions
 
 console = Console()
 

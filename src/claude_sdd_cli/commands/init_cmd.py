@@ -1,4 +1,4 @@
-"""sdd init — Initialize a project for human-authored SDD."""
+"""sdd init — Initialize a project for Claude SDD."""
 
 from pathlib import Path
 
@@ -6,7 +6,7 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
-from human_sdd_cli.templates import copy_templates_to, load_template, populate_template
+from claude_sdd_cli.templates import copy_templates_to, load_template, populate_template
 
 console = Console()
 
@@ -88,13 +88,11 @@ def _default_constitution(name: str) -> str:
 Every feature begins with a structured specification before implementation starts.
 Requirements, user stories, edge cases, and success criteria are defined first.
 
-## Article 2: Human Authorship Mandate
-All executable project artifacts must be authored by the human developer.
-AI may not generate implementation code, test code, infrastructure code,
-migration code, build scripts, configuration code, or any other executable artifact.
+## Article 2: Claude CLI Implementation Mandate
+All executable project artifacts must be implemented via Claude CLI. The planning AI (Copilot) may not generate implementation code, test code, infrastructure code, migration code, build scripts, configuration code, or any other executable artifact. Claude CLI is the sole implementer.
 
 ## Article 3: AI Planning-Only Mandate
-AI participation is restricted to requirement clarification, research, planning,
+The planning AI (Copilot) participation is restricted to requirement clarification, research, planning,
 task decomposition, review commentary, consistency checking, and traceability support.
 
 ## Article 4: Ambiguity Marking Requirement
@@ -109,9 +107,10 @@ a requirement, contract, or planning decision.
 The tool emphasizes validation, consistency checking, and review.
 When gaps are found, the output is follow-up tasks and questions — not code patches.
 
-## Article 7: No Executable AI Output Rule
-Any AI-generated artifact containing executable code, code fences with implementation
+## Article 7: No Executable Planning AI Output Rule
+Any planning AI (Copilot) artifact containing executable code, code fences with implementation
 content, or copy-paste-ready source/config/test content must be rejected or quarantined.
+Tasks are intended for Claude CLI to implement.
 
 ## Article 8: Transparency and Auditability
 Prompt and response history is preserved for review. Every planning decision
@@ -123,27 +122,26 @@ def _default_doc(doc_type: str, name: str) -> str:
     if doc_type == "philosophy":
         return f"""# Philosophy — {name}
 
-This project follows **Human-Authored Specification-Driven Development**, a workflow
-where specifications drive development, but the human developer writes every line of
-implementation code.
+This project follows **Claude SDD (Specification-Driven Development)**, a workflow
+where specifications drive development, but Claude CLI implements all code based on planning artifacts.
 
 ## Why?
 
 - Specifications should be the source of truth.
-- AI strengthens thinking without replacing implementation.
-- Developer understanding and authorship must be preserved.
+- AI (Copilot) strengthens thinking, Claude CLI implements.
+- Clear specifications guide Claude CLI implementation.
 - Planning support should be structured and disciplined, not automated.
 
 ## The AI's Role
 
-The AI acts as a **planning copilot**: it helps you think through requirements,
-identify ambiguity, structure plans, and review your work. It never writes code
-for you.
+The planning AI (Copilot) acts as a **planning copilot**: it helps you think through requirements,
+identify ambiguity, structure plans, and review your work. It never writes code.
+Claude CLI implements the tasks.
 
 ## The Developer's Role
 
-You own all implementation. Every function, test, config, and migration is yours.
-The AI helps you plan; you build.
+Claude CLI handles all implementation. Every function, test, config, and migration is implemented by Claude CLI from the planning artifacts.
+Copilot helps plan; Claude CLI builds.
 """
     else:  # workflow
         return f"""# Workflow — {name}
@@ -163,10 +161,10 @@ Run `sdd plan --feature <name>` to generate a technical planning package.
 Produces plan.md, research.md, data-model.md, contracts, and quickstart.md.
 
 ## Phase 5: Tasks
-Run `sdd tasks --feature <name>` to create a human execution checklist.
+Run `sdd tasks --feature <name>` to create a Claude CLI execution checklist.
 
 ## Phase 6: Implement
-Write all code yourself. The CLI does not help here — that's the point.
+Claude CLI implements the code based on the task breakdown.
 
 ## Phase 7: Review
 Run `sdd review --feature <name>` to compare your implementation against the spec.

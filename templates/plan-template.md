@@ -34,5 +34,5 @@ APIs, services, or systems this will interact with.
 ## Validation Approach
 How the developer will verify the implementation works.
 
-## Human Implementation Guidance
-High-level guidance for the developer — what to build first, key decisions to make.
+## Claude CLI Implementation Guidance
+High-level guidance for Claude CLI — what to build first, key decisions to make.

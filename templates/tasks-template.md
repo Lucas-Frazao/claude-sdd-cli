@@ -20,3 +20,7 @@
 
 ## Review Tasks
 - [ ] TASK-007: Run `sdd review` and address findings (traces: REQ-001)
+
+## Claude CLI Implementation Notes
+
+(Context and guidance for Claude CLI. Include file paths, requirement references, and key context from the spec/plan.)

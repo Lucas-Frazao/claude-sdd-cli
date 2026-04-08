@@ -2,7 +2,7 @@
 description: Define the product vision — what it is, who it's for, what problem it solves, and guiding principles.
 handoffs:
   - label: Define Feature Roadmap
-    agent: hsdd.roadmap
+    agent: csdd.roadmap
     prompt: Define the feature roadmap based on the product vision.
     send: true
 ---
@@ -17,15 +17,15 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Human-Authored SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text.
 
-The text the user typed after `/hsdd.vision` in the triggering message **is** the product description. Use it as the starting point for defining the product vision.
+The text the user typed after `/csdd.vision` in the triggering message **is** the product description. Use it as the starting point for defining the product vision.
 
 Given that product description, do this:
 
-1. **Read the existing constitution** at `.hsdd/memory/constitution.md` to understand the project's foundational principles.
+1. **Read the existing constitution** at `.csdd/memory/constitution.md` to understand the project's foundational principles.
 
-2. **Read any existing product vision** at `.hsdd/memory/product-vision.md` if it exists. If updating, preserve content the user has already refined.
+2. **Read any existing product vision** at `.csdd/memory/product-vision.md` if it exists. If updating, preserve content the user has already refined.
 
 3. **Generate the product vision document** with these EXACT sections:
 
@@ -65,12 +65,12 @@ Given that product description, do this:
    - Scope boundaries must be explicit
    - Maximum 3 [NEEDS CLARIFICATION] markers
 
-5. **Write the vision** to `.hsdd/memory/product-vision.md` (overwrite if updating).
+5. **Write the vision** to `.csdd/memory/product-vision.md` (overwrite if updating).
 
 6. **Report completion** with:
    - Summary of the product vision
    - Any [NEEDS CLARIFICATION] items that need answers
-   - Suggestion to proceed with `/hsdd.roadmap` to define features
+   - Suggestion to proceed with `/csdd.roadmap` to define features
 
 ## Quick Guidelines
 

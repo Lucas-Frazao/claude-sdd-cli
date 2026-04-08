@@ -2,10 +2,10 @@
 description: Create or update the feature specification from a natural language feature description.
 handoffs:
   - label: Build Technical Plan
-    agent: hsdd.plan
+    agent: csdd.plan
     prompt: Create a plan for the spec. I am building with...
   - label: Clarify Spec Requirements
-    agent: hsdd.clarify
+    agent: csdd.clarify
     prompt: Clarify specification requirements
     send: true
 scripts:
@@ -22,9 +22,9 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Human-Authored SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text. Focus on WHAT and WHY, never HOW to implement.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text. Focus on WHAT and WHY, never HOW to implement.
 
-The text the user typed after `/hsdd.specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `{ARGS}` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
+The text the user typed after `/csdd.specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `{ARGS}` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
 
 Given that feature description, do this:
 
@@ -48,7 +48,7 @@ Given that feature description, do this:
    - You must only ever run this script once per feature
    - The JSON output will contain BRANCH_NAME and SPEC_FILE paths
 
-3. Load `.hsdd/templates/spec-template.md` to understand required sections.
+3. Load `.csdd/templates/spec-template.md` to understand required sections.
 
 4. Follow this execution flow:
 
@@ -111,7 +111,7 @@ Given that feature description, do this:
         **Your choice**: _[Wait for user response]_
         ```
 
-7. Report completion with branch name, spec file path, and readiness for the next phase (`/hsdd.clarify` or `/hsdd.plan`).
+7. Report completion with branch name, spec file path, and readiness for the next phase (`/csdd.clarify` or `/csdd.plan`).
 
 ## Quick Guidelines
 

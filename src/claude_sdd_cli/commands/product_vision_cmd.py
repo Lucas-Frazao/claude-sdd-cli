@@ -6,7 +6,7 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
-from human_sdd_cli.ai import AIOrchestrator
+from claude_sdd_cli.ai import AIOrchestrator
 
 console = Console()
 
@@ -19,12 +19,12 @@ console = Console()
 def product_vision_cmd(description: str, path: str, model: str, no_ai: bool):
     """Define the product vision — what it is, who it's for, and why it matters."""
     root = Path(path).resolve()
-    hsdd_dir = root / ".hsdd"
+    csdd_dir = root / ".csdd"
 
-    if not hsdd_dir.is_dir():
-        raise click.ClickException("No .hsdd/ directory found. Run 'hsdd init' first.")
+    if not csdd_dir.is_dir():
+        raise click.ClickException("No .csdd/ directory found. Run 'csdd init' first.")
 
-    memory_dir = hsdd_dir / "memory"
+    memory_dir = csdd_dir / "memory"
     memory_dir.mkdir(parents=True, exist_ok=True)
     vision_path = memory_dir / "product-vision.md"
 
