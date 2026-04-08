@@ -562,13 +562,17 @@ def init(
         next_steps.add_row("1.", "Open the project in VS Code")
         next_steps.add_row("2.", "Open Copilot Chat")
         next_steps.add_row("3.", "Type: /csdd.vision to define your product vision")
-        next_steps.add_row("4.", "Type: /csdd.roadmap to define your feature roadmap")
-        next_steps.add_row("5.", "For each feature: specify -> clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review")
+        next_steps.add_row("4.", "Type: /csdd.tech-stack to define your technology stack")
+        next_steps.add_row("5.", "Type: /csdd.architecture to define your application architecture")
+        next_steps.add_row("6.", "Type: /csdd.roadmap to define your feature roadmap")
+        next_steps.add_row("7.", "For each feature: specify -> clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review")
     else:
         next_steps.add_row("1.", "Review .csdd/memory/constitution.md")
         next_steps.add_row("2.", "Run: csdd vision --description 'your product idea'")
-        next_steps.add_row("3.", "Run: csdd roadmap")
-        next_steps.add_row("4.", "For each feature: csdd specify -> clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review")
+        next_steps.add_row("3.", "Run: csdd tech-stack")
+        next_steps.add_row("4.", "Run: csdd architecture")
+        next_steps.add_row("5.", "Run: csdd roadmap")
+        next_steps.add_row("6.", "For each feature: csdd specify -> clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review")
 
     console.print(Panel(
         next_steps,
@@ -613,6 +617,10 @@ def check():
     tracker = StepTracker("Project Check")
     tracker.add("csdd_dir", ".csdd/ directory")
     tracker.add("constitution", "Constitution")
+    tracker.add("vision", "Product Vision")
+    tracker.add("tech_stack", "Tech Stack")
+    tracker.add("architecture", "Architecture")
+    tracker.add("roadmap", "Feature Roadmap")
     tracker.add("templates", "Templates")
     tracker.add("scripts", "Scripts")
     tracker.add("copilot", "Copilot integration")
@@ -629,6 +637,30 @@ def check():
         tracker.complete("constitution", "Found")
     else:
         tracker.error("constitution", "Not found")
+
+    # Check product vision
+    if (project_path / ".csdd" / "memory" / "product-vision.md").is_file():
+        tracker.complete("vision", "Found")
+    else:
+        tracker.skip("vision", "Not created yet -- run 'csdd vision'")
+
+    # Check tech stack
+    if (project_path / ".csdd" / "memory" / "tech-stack.md").is_file():
+        tracker.complete("tech_stack", "Found")
+    else:
+        tracker.skip("tech_stack", "Not created yet -- run 'csdd tech-stack'")
+
+    # Check architecture
+    if (project_path / ".csdd" / "memory" / "architecture.md").is_file():
+        tracker.complete("architecture", "Found")
+    else:
+        tracker.skip("architecture", "Not created yet -- run 'csdd architecture'")
+
+    # Check feature roadmap
+    if (project_path / ".csdd" / "memory" / "feature-roadmap.md").is_file():
+        tracker.complete("roadmap", "Found")
+    else:
+        tracker.skip("roadmap", "Not created yet -- run 'csdd roadmap'")
 
     # Check templates
     templates_dir = project_path / ".csdd" / "templates"

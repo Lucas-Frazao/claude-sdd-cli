@@ -187,6 +187,73 @@ class TestFeatureRoadmapCommand:
             assert roadmap_path.exists()
 
 
+class TestTechStackCommand:
+    def test_tech_stack_no_ai(self):
+        runner = CliRunner()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            csdd_dir = root / ".csdd" / "memory"
+            csdd_dir.mkdir(parents=True)
+            (csdd_dir / "constitution.md").write_text("# Constitution\n")
+            (csdd_dir / "product-vision.md").write_text("# Product Vision\n\nA recipe manager\n")
+            # Run tech-stack
+            result = runner.invoke(cli, [
+                "tech-stack",
+                "--path", tmpdir,
+                "--no-ai",
+            ])
+            assert result.exit_code == 0
+            tech_stack_path = csdd_dir / "tech-stack.md"
+            assert tech_stack_path.exists()
+            content = tech_stack_path.read_text()
+            assert "Tech Stack" in content
+            assert "Programming Language" in content
+
+    def test_tech_stack_requires_csdd_dir(self):
+        runner = CliRunner()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result = runner.invoke(cli, [
+                "tech-stack",
+                "--path", tmpdir,
+                "--no-ai",
+            ])
+            assert result.exit_code != 0
+
+
+class TestArchitectureCommand:
+    def test_architecture_no_ai(self):
+        runner = CliRunner()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            csdd_dir = root / ".csdd" / "memory"
+            csdd_dir.mkdir(parents=True)
+            (csdd_dir / "constitution.md").write_text("# Constitution\n")
+            (csdd_dir / "product-vision.md").write_text("# Product Vision\n\nA recipe manager\n")
+            (csdd_dir / "tech-stack.md").write_text("# Tech Stack\n\nPython + FastAPI\n")
+            # Run architecture
+            result = runner.invoke(cli, [
+                "architecture",
+                "--path", tmpdir,
+                "--no-ai",
+            ])
+            assert result.exit_code == 0
+            architecture_path = csdd_dir / "architecture.md"
+            assert architecture_path.exists()
+            content = architecture_path.read_text()
+            assert "Application Architecture" in content
+            assert "System Layers" in content
+
+    def test_architecture_requires_csdd_dir(self):
+        runner = CliRunner()
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result = runner.invoke(cli, [
+                "architecture",
+                "--path", tmpdir,
+                "--no-ai",
+            ])
+            assert result.exit_code != 0
+
+
 class TestTraceCommand:
     def test_trace_report(self):
         runner = CliRunner()

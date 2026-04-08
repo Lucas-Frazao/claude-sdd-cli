@@ -240,8 +240,10 @@ The recommended workflow is:
 
 1. `/csdd.constitution` -- Define project principles (done during init)
 2. `/csdd.vision` -- Define the product vision
-3. `/csdd.roadmap` -- Define ALL features needed to realize the product
-4. For EACH feature from the roadmap:
+3. `/csdd.tech-stack` -- Define the technology stack
+4. `/csdd.architecture` -- Define the application architecture
+5. `/csdd.roadmap` -- Define ALL features needed to realize the product
+6. For EACH feature from the roadmap:
    - `/csdd.specify` -- Create a feature specification
    - `/csdd.clarify` -- Find ambiguity and contradictions
    - `/csdd.plan` -- Generate a technical planning package
@@ -255,6 +257,8 @@ The recommended workflow is:
 Use these commands in Copilot Chat:
 
 - `/csdd.vision` -- Define the product vision (what, who, why)
+- `/csdd.tech-stack` -- Define the technology stack (languages, frameworks, databases, tooling)
+- `/csdd.architecture` -- Define the application architecture (structure, layers, components)
 - `/csdd.roadmap` -- Define ALL features needed to realize the product
 - `/csdd.specify` -- Create a feature specification from a natural language description
 - `/csdd.plan` -- Generate a technical planning package (prose only)
@@ -269,6 +273,8 @@ Use these commands in Copilot Chat:
 
 - `.csdd/memory/constitution.md` -- Project constitution (8 articles)
 - `.csdd/memory/product-vision.md` -- Product vision document
+- `.csdd/memory/tech-stack.md` -- Technology stack decisions
+- `.csdd/memory/architecture.md` -- Application architecture
 - `.csdd/memory/feature-roadmap.md` -- Feature roadmap
 - `.csdd/templates/` -- Markdown templates for specs, plans, tasks, etc.
 - `specs/` -- Feature specifications and planning artifacts

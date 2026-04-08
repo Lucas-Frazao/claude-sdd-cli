@@ -1,9 +1,9 @@
 ---
 description: Define the product vision — what it is, who it's for, what problem it solves, and guiding principles.
 handoffs:
-  - label: Define Feature Roadmap
-    agent: csdd.roadmap
-    prompt: Define the feature roadmap based on the product vision.
+  - label: Define Tech Stack
+    agent: csdd.tech-stack
+    prompt: Define the tech stack based on the product vision.
     send: true
 ---
 

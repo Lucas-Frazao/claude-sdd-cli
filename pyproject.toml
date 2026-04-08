@@ -49,6 +49,8 @@ packages = ["src/claude_sdd_cli"]
 "templates/research-template.md" = "claude_sdd_cli/core_pack/templates/research-template.md"
 "templates/product-vision-template.md" = "claude_sdd_cli/core_pack/templates/product-vision-template.md"
 "templates/feature-roadmap-template.md" = "claude_sdd_cli/core_pack/templates/feature-roadmap-template.md"
+"templates/tech-stack-template.md" = "claude_sdd_cli/core_pack/templates/tech-stack-template.md"
+"templates/architecture-template.md" = "claude_sdd_cli/core_pack/templates/architecture-template.md"
 "templates/vscode-settings.json" = "claude_sdd_cli/core_pack/templates/vscode-settings.json"
 # Command templates
 "templates/commands" = "claude_sdd_cli/core_pack/commands"

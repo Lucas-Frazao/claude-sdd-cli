@@ -27,11 +27,15 @@ Given the product context, do this:
 
 1. **Read the product vision** at `.csdd/memory/product-vision.md`. If it does not exist, warn the user and suggest running `/csdd.vision` first. You can still proceed if the user provides sufficient context.
 
-2. **Read the constitution** at `.csdd/memory/constitution.md` for project principles.
+2. **Read the tech stack** at `.csdd/memory/tech-stack.md` for technology decisions. If it does not exist, note that the tech stack has not been defined yet.
 
-3. **Read any existing roadmap** at `.csdd/memory/feature-roadmap.md` if it exists. If updating, preserve content the user has already refined.
+3. **Read the architecture** at `.csdd/memory/architecture.md` for structural decisions. If it does not exist, note that the architecture has not been defined yet.
 
-4. **Generate the feature roadmap** with these EXACT sections:
+4. **Read the constitution** at `.csdd/memory/constitution.md` for project principles.
+
+5. **Read any existing roadmap** at `.csdd/memory/feature-roadmap.md` if it exists. If updating, preserve content the user has already refined.
+
+6. **Generate the feature roadmap** with these EXACT sections:
 
    # Feature Roadmap
 
@@ -67,15 +71,15 @@ Given the product context, do this:
    ## Open Questions
    (Mark anything unclear with [NEEDS CLARIFICATION])
 
-5. **Feature scoping guidelines**:
+7. **Feature scoping guidelines**:
    - Think comprehensively: include infrastructure, error handling, user onboarding, monitoring, deployment, and admin features
    - Each feature should be scoped to be implementable independently through the specify -> clarify -> plan -> tasks -> review pipeline
    - Features should be small enough to spec individually but large enough to deliver user value
    - Respect dependency ordering so features can be built incrementally
 
-6. **Write the roadmap** to `.csdd/memory/feature-roadmap.md` (overwrite if updating).
+8. **Write the roadmap** to `.csdd/memory/feature-roadmap.md` (overwrite if updating).
 
-7. **Report completion** with:
+9. **Report completion** with:
    - Total number of features defined
    - Breakdown by priority and phase
    - Any [NEEDS CLARIFICATION] items
