@@ -1,15 +1,6 @@
 ---
 description: Create or update the feature specification from a natural language feature description.
-handoffs:
-  - label: Build Technical Plan
-    agent: plan
-    prompt: Create a plan for the spec. I am building with...
-  - label: Clarify Spec Requirements
-    agent: clarify
-    prompt: Clarify specification requirements
-    send: true
-scripts:
-  sh: scripts/bash/create-new-feature.sh "{ARGS}"
+argument-hint: "[feature description]"
 ---
 
 ## User Input
@@ -40,7 +31,7 @@ Given that feature description, do this:
 
 2. **Create the feature branch** by running the script with `--short-name` (and `--json`). In sequential mode, do NOT pass `--number` -- the script auto-detects the next available number:
 
-   - Bash example: `{SCRIPT} --json --short-name "user-auth" "Add user authentication"`
+   - Bash example: `.csdd/scripts/bash/create-new-feature.sh --json --short-name "user-auth" "Add user authentication"`
 
    **IMPORTANT**:
    - Do NOT pass `--number` -- the script determines the correct next number automatically

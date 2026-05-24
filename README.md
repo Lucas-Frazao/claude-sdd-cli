@@ -32,9 +32,9 @@ csdd init my-project
 
 This creates:
 - `.csdd/` directory with constitution, templates, and scripts
-- `.github/skills/<name>/SKILL.md` — slash-command skills (`/vision`, `/plan`, etc.)
-- `.github/copilot-instructions.md` — project context loaded by VS Code chat
-- `.vscode/settings.json` — chat prompt recommendations
+- `.claude/commands/<name>.md` — slash-command files (`/vision`, `/plan`, etc.) read by the Claude VS Code extension
+- `CLAUDE.md` — project context loaded automatically by Claude
+- `.vscode/settings.json` — VS Code workspace settings
 
 ### 2. Open in VS Code with the Claude extension
 
@@ -99,20 +99,20 @@ my-project/
 │   │       ├── create-new-feature.sh
 │   │       └── setup-plan.sh
 │   └── init-options.json
-├── .github/
-│   ├── skills/
-│   │   ├── vision/SKILL.md
-│   │   ├── tech-stack/SKILL.md
-│   │   ├── architecture/SKILL.md
-│   │   ├── roadmap/SKILL.md
-│   │   ├── specify/SKILL.md
-│   │   ├── plan/SKILL.md
-│   │   ├── tasks/SKILL.md
-│   │   ├── clarify/SKILL.md
-│   │   ├── review/SKILL.md
-│   │   ├── trace/SKILL.md
-│   │   └── constitution/SKILL.md
-│   └── copilot-instructions.md
+├── .claude/
+│   └── commands/
+│       ├── vision.md
+│       ├── tech-stack.md
+│       ├── architecture.md
+│       ├── roadmap.md
+│       ├── specify.md
+│       ├── plan.md
+│       ├── tasks.md
+│       ├── clarify.md
+│       ├── review.md
+│       ├── trace.md
+│       └── constitution.md
+├── CLAUDE.md
 ├── .vscode/
 │   └── settings.json
 └── specs/

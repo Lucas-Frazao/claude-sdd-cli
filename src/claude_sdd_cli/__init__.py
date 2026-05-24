@@ -51,7 +51,6 @@ TAGLINE = "Claude SDD -- Claude plans, you implement"
 
 AI_ASSISTANTS = {
     "claude-vscode": "Claude (VS Code extension)",
-    "copilot": "GitHub Copilot (VS Code) -- legacy",
 }
 
 SCRIPT_TYPE_CHOICES = {"sh": "POSIX Shell (bash/zsh)"}
@@ -230,7 +229,7 @@ class BannerGroup(TyperGroup):
 
 app = typer.Typer(
     name="csdd",
-    help="Claude SDD CLI -- AI plans, Claude codes.",
+    help="Claude SDD CLI -- Claude plans, you implement.",
     add_completion=False,
     invoke_without_command=True,
     cls=BannerGroup,
@@ -464,7 +463,7 @@ def _stage_csdd_files(project_path: Path) -> None:
     function stages them so the user sees them in ``git status`` and won't
     accidentally forget to commit.
     """
-    paths_to_stage = [".csdd", ".github", ".vscode", "specs"]
+    paths_to_stage = [".csdd", ".claude", ".vscode", "specs", "CLAUDE.md"]
     try:
         subprocess.run(
             ["git", "add", "--"] + paths_to_stage,
@@ -488,7 +487,11 @@ def _save_init_options(project_path: Path, options: dict) -> None:
 def init(
     project_name: str = typer.Argument(None, help="Name of the project to create (or '.' for current dir)"),
     here: bool = typer.Option(False, "--here", help="Initialize in the current directory"),
-    ai: str = typer.Option(None, "--ai", help="AI assistant to use (claude-vscode)"),
+    ai: str = typer.Option(
+        None,
+        "--ai",
+        help="AI assistant to use (only 'claude-vscode' is supported).",
+    ),
     no_git: bool = typer.Option(False, "--no-git", help="Skip git initialization"),
 ):
     """Initialize a new Claude SDD project."""
@@ -504,10 +507,16 @@ def init(
 
     show_banner()
 
-    # Interactive AI assistant selection
+    # Only claude-vscode is supported; if the user passes anything else,
+    # reject it with a clear message.
     if ai is None:
-        console.print("[bold]Choose your AI assistant:[/bold]")
-        ai = select_with_arrows(AI_ASSISTANTS, "AI Assistant", default_key="claude-vscode")
+        ai = "claude-vscode"
+    elif ai not in AI_ASSISTANTS:
+        console.print(
+            f"[red]Unknown AI assistant: {ai}[/red] "
+            "Only 'claude-vscode' is supported."
+        )
+        raise typer.Exit(1)
 
     console.print(f"\n[cyan]AI assistant:[/cyan] {ai}")
     console.print(f"[cyan]Project:[/cyan] {project_name}")
@@ -547,13 +556,12 @@ def init(
 
         # 4. Integration setup
         tracker.start("integration", f"Setting up {ai}")
-        if ai in ("claude-vscode", "copilot"):
-            # Both assistants share the same .github/skills/<name>/SKILL.md
-            # mechanism — VS Code Claude and Copilot Chat both discover slash
-            # commands from that directory.
-            from claude_sdd_cli.integrations.copilot import CopilotIntegration
+        if ai == "claude-vscode":
+            from claude_sdd_cli.integrations.claude_vscode import (
+                ClaudeVSCodeIntegration,
+            )
 
-            integration = CopilotIntegration()
+            integration = ClaudeVSCodeIntegration()
             created_files = integration.setup(project_path)
             tracker.complete("integration", f"{len(created_files)} files created")
         else:
@@ -588,10 +596,9 @@ def init(
     next_steps.add_column(style="cyan", justify="right")
     next_steps.add_column(style="white")
 
-    if ai in ("claude-vscode", "copilot"):
-        chat_label = "Claude chat" if ai == "claude-vscode" else "Copilot Chat"
+    if ai == "claude-vscode":
         next_steps.add_row("1.", "Open the project in VS Code")
-        next_steps.add_row("2.", f"Open {chat_label}")
+        next_steps.add_row("2.", "Open the Claude chat panel")
         next_steps.add_row("3.", "Type: /vision to define your product vision")
         next_steps.add_row("4.", "Type: /tech-stack to define your technology stack")
         next_steps.add_row("5.", "Type: /architecture to define your application architecture")
@@ -615,33 +622,40 @@ def init(
 
 @app.command()
 def integrate(
-    ai: str = typer.Argument("claude-vscode", help="AI assistant to integrate (claude-vscode, copilot)"),
+    ai: str = typer.Argument(
+        "claude-vscode",
+        help="AI assistant to integrate (only 'claude-vscode' is supported).",
+    ),
 ):
-    """Set up or re-run an AI assistant integration."""
+    """Set up or re-run the Claude VS Code extension integration."""
     project_path = Path.cwd()
 
     if not (project_path / ".csdd").is_dir():
         console.print("[red]No .csdd/ directory found. Run 'csdd init' first.[/red]")
         raise typer.Exit(1)
 
-    if ai in ("claude-vscode", "copilot"):
-        from claude_sdd_cli.integrations.copilot import CopilotIntegration
-
-        integration = CopilotIntegration()
-        created = integration.setup(project_path)
-        # Stage new files so they aren't forgotten
-        if is_git_repo(project_path):
-            _stage_csdd_files(project_path)
-        label = "Claude (VS Code)" if ai == "claude-vscode" else "Copilot"
-        console.print(f"[green]{label} integration complete.[/green] {len(created)} files created/updated.")
-        for f in created:
-            rel = f.relative_to(project_path)
-            console.print(f"  [dim]{rel}[/dim]")
-        console.print()
-        console.print("[dim]New files have been staged. Run 'git commit' to save them.[/dim]")
-    else:
-        console.print(f"[red]Unknown AI assistant: {ai}[/red]")
+    if ai != "claude-vscode":
+        console.print(
+            f"[red]Unknown AI assistant: {ai}[/red] "
+            "Only 'claude-vscode' is supported."
+        )
         raise typer.Exit(1)
+
+    from claude_sdd_cli.integrations.claude_vscode import ClaudeVSCodeIntegration
+
+    integration = ClaudeVSCodeIntegration()
+    created = integration.setup(project_path)
+    if is_git_repo(project_path):
+        _stage_csdd_files(project_path)
+    console.print(
+        f"[green]Claude (VS Code) integration complete.[/green] "
+        f"{len(created)} files created/updated."
+    )
+    for f in created:
+        rel = f.relative_to(project_path)
+        console.print(f"  [dim]{rel}[/dim]")
+    console.print()
+    console.print("[dim]New files have been staged. Run 'git commit' to save them.[/dim]")
 
 
 @app.command()
@@ -660,7 +674,8 @@ def check():
     tracker.add("roadmap", "Feature Roadmap")
     tracker.add("templates", "Templates")
     tracker.add("scripts", "Scripts")
-    tracker.add("skills", "VS Code slash-command skills")
+    tracker.add("commands", "Claude VS Code slash commands")
+    tracker.add("claude_md", "CLAUDE.md project context")
     tracker.add("git", "Git repository")
 
     # Check .csdd/
@@ -715,24 +730,40 @@ def check():
     else:
         tracker.error("scripts", "No scripts found")
 
-    # Check installed slash-command skills
-    skills_dir = project_path / ".github" / "skills"
-    expected_skills = {
+    # Check installed slash-command files
+    commands_dir = project_path / ".claude" / "commands"
+    expected_commands = {
         "vision", "tech-stack", "architecture", "roadmap", "specify",
         "plan", "tasks", "clarify", "review", "trace", "constitution",
     }
-    if skills_dir.is_dir():
+    if commands_dir.is_dir():
         found = {
-            d.name for d in skills_dir.iterdir()
-            if d.is_dir() and (d / "SKILL.md").exists()
+            f.stem for f in commands_dir.glob("*.md")
         }
-        skill_count = len(found & expected_skills)
-        if skill_count > 0:
-            tracker.complete("skills", f"{skill_count} skill commands found")
+        missing = sorted(expected_commands - found)
+        present = len(found & expected_commands)
+        if missing:
+            tracker.error(
+                "commands",
+                f"{present}/{len(expected_commands)} found, missing: "
+                f"{', '.join(missing)}",
+            )
         else:
-            tracker.skip("skills", "No skills found")
+            tracker.complete(
+                "commands",
+                f"{present}/{len(expected_commands)} slash commands installed",
+            )
     else:
-        tracker.skip("skills", "Not configured")
+        tracker.error(
+            "commands",
+            "No .claude/commands/ directory -- run 'csdd integrate claude-vscode'",
+        )
+
+    # Check CLAUDE.md
+    if (project_path / "CLAUDE.md").is_file():
+        tracker.complete("claude_md", "Found")
+    else:
+        tracker.error("claude_md", "CLAUDE.md missing -- run 'csdd integrate claude-vscode'")
 
     # Check git
     if is_git_repo(project_path):

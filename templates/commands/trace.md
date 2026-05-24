@@ -1,5 +1,6 @@
 ---
 description: Map requirements to tasks and check coverage percentage for full requirement traceability.
+argument-hint: "[feature name]"
 ---
 
 ## User Input
