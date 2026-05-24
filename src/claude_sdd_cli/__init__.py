@@ -1,7 +1,8 @@
 """Claude SDD -- Specification-Driven Development CLI.
 
-AI plans (via Copilot), Claude codes. A planning copilot that helps you write specs,
-plans, and tasks -- then Claude CLI implements them.
+Claude plans, you implement. A planning assistant (Claude in the VS Code
+extension) that helps you write specs, plans, and tasks -- then you implement
+them by hand.
 
 Usage:
     csdd init <project-name>
@@ -46,10 +47,11 @@ BANNER = """
  ╚═════╝╚══════╝╚═════╝ ╚═════╝
 """
 
-TAGLINE = "Claude SDD -- AI Plans, Claude Codes"
+TAGLINE = "Claude SDD -- Claude plans, you implement"
 
 AI_ASSISTANTS = {
-    "copilot": "GitHub Copilot (VS Code)",
+    "claude-vscode": "Claude (VS Code extension)",
+    "copilot": "GitHub Copilot (VS Code) -- legacy",
 }
 
 SCRIPT_TYPE_CHOICES = {"sh": "POSIX Shell (bash/zsh)"}
@@ -376,33 +378,36 @@ def _default_constitution(name: str) -> str:
 Every feature begins with a structured specification before implementation starts.
 Requirements, user stories, edge cases, and success criteria are defined first.
 
-## Article 2: Claude CLI Implementation Mandate
-All executable project artifacts must be implemented via Claude CLI.
-The planning AI (Copilot) may not generate implementation code, test code,
-infrastructure code, migration code, build scripts, configuration code,
-or any other executable artifact. Claude CLI is the sole implementer.
+## Article 2: Human Implementation Mandate
+All executable project artifacts must be implemented by a human developer.
+The planning AI (Claude in the VS Code extension) may not generate
+implementation code, test code, infrastructure code, migration code, build
+scripts, configuration code, or any other executable artifact. The human is
+the sole implementer; AI only plans.
 
-## Article 3: AI Planning-Only Mandate (Copilot)
-The planning AI (Copilot) participation is restricted to requirement clarification,
-research, planning, task decomposition, review commentary, consistency checking,
-and traceability support. Copilot must not generate code.
+## Article 3: AI Planning-Only Mandate
+The planning AI participates only in requirement clarification, research,
+planning, task decomposition, review commentary, consistency checking, and
+traceability support. It produces prose, tables, and checklists -- never code.
 
 ## Article 4: Ambiguity Marking Requirement
-When requirements are ambiguous or underspecified, the system must mark them with
-[NEEDS CLARIFICATION] rather than guessing or filling in assumptions silently.
+When requirements are ambiguous or underspecified, the system must mark them
+with [NEEDS CLARIFICATION] rather than guessing or filling in assumptions
+silently.
 
 ## Article 5: Traceability Requirement
-Each task must map to one or more requirements. Each review finding must reference
-a requirement, contract, or planning decision.
+Each task must map to one or more requirements. Each review finding must
+reference a requirement, contract, or planning decision.
 
 ## Article 6: Review-Before-Regeneration Principle
-The tool emphasizes validation, consistency checking, and review.
-When gaps are found, the output is follow-up tasks and questions -- not code patches.
+The tool emphasizes validation, consistency checking, and review. When gaps
+are found, the output is follow-up tasks and questions -- not code patches.
 
 ## Article 7: No Executable Planning AI Output Rule
-Any planning AI (Copilot) artifact containing executable code, code fences with
-implementation content, or copy-paste-ready source/config/test content must be
-rejected or quarantined. Tasks are intended for Claude CLI to implement.
+Any planning AI artifact containing executable code, code fences with
+implementation content, or copy-paste-ready source/config/test content must
+be rejected or quarantined. Tasks describe WHAT to build and WHERE; the
+human writes every line of code.
 
 ## Article 8: Transparency and Auditability
 Prompt and response history is preserved for review. Every planning decision
@@ -483,7 +488,7 @@ def _save_init_options(project_path: Path, options: dict) -> None:
 def init(
     project_name: str = typer.Argument(None, help="Name of the project to create (or '.' for current dir)"),
     here: bool = typer.Option(False, "--here", help="Initialize in the current directory"),
-    ai: str = typer.Option(None, "--ai", help="AI assistant to use (copilot)"),
+    ai: str = typer.Option(None, "--ai", help="AI assistant to use (claude-vscode)"),
     no_git: bool = typer.Option(False, "--no-git", help="Skip git initialization"),
 ):
     """Initialize a new Claude SDD project."""
@@ -502,7 +507,7 @@ def init(
     # Interactive AI assistant selection
     if ai is None:
         console.print("[bold]Choose your AI assistant:[/bold]")
-        ai = select_with_arrows(AI_ASSISTANTS, "AI Assistant", default_key="copilot")
+        ai = select_with_arrows(AI_ASSISTANTS, "AI Assistant", default_key="claude-vscode")
 
     console.print(f"\n[cyan]AI assistant:[/cyan] {ai}")
     console.print(f"[cyan]Project:[/cyan] {project_name}")
@@ -542,7 +547,10 @@ def init(
 
         # 4. Integration setup
         tracker.start("integration", f"Setting up {ai}")
-        if ai == "copilot":
+        if ai in ("claude-vscode", "copilot"):
+            # Both assistants share the same .github/skills/<name>/SKILL.md
+            # mechanism — VS Code Claude and Copilot Chat both discover slash
+            # commands from that directory.
             from claude_sdd_cli.integrations.copilot import CopilotIntegration
 
             integration = CopilotIntegration()
@@ -580,21 +588,22 @@ def init(
     next_steps.add_column(style="cyan", justify="right")
     next_steps.add_column(style="white")
 
-    if ai == "copilot":
+    if ai in ("claude-vscode", "copilot"):
+        chat_label = "Claude chat" if ai == "claude-vscode" else "Copilot Chat"
         next_steps.add_row("1.", "Open the project in VS Code")
-        next_steps.add_row("2.", "Open Copilot Chat")
-        next_steps.add_row("3.", "Type: /csdd-vision to define your product vision")
-        next_steps.add_row("4.", "Type: /csdd-tech-stack to define your technology stack")
-        next_steps.add_row("5.", "Type: /csdd-architecture to define your application architecture")
-        next_steps.add_row("6.", "Type: /csdd-roadmap to define your feature roadmap")
-        next_steps.add_row("7.", "For each feature: specify -> clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review")
+        next_steps.add_row("2.", f"Open {chat_label}")
+        next_steps.add_row("3.", "Type: /vision to define your product vision")
+        next_steps.add_row("4.", "Type: /tech-stack to define your technology stack")
+        next_steps.add_row("5.", "Type: /architecture to define your application architecture")
+        next_steps.add_row("6.", "Type: /roadmap to define your feature roadmap")
+        next_steps.add_row("7.", "For each feature: /specify -> /clarify -> /plan -> /tasks -> YOU IMPLEMENT -> /review")
     else:
         next_steps.add_row("1.", "Review .csdd/memory/constitution.md")
         next_steps.add_row("2.", "Run: csdd vision --description 'your product idea'")
         next_steps.add_row("3.", "Run: csdd tech-stack")
         next_steps.add_row("4.", "Run: csdd architecture")
         next_steps.add_row("5.", "Run: csdd roadmap")
-        next_steps.add_row("6.", "For each feature: csdd specify -> clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review")
+        next_steps.add_row("6.", "For each feature: csdd specify -> clarify -> plan -> tasks -> YOU IMPLEMENT -> review")
 
     console.print(Panel(
         next_steps,
@@ -606,7 +615,7 @@ def init(
 
 @app.command()
 def integrate(
-    ai: str = typer.Argument("copilot", help="AI assistant to integrate (copilot)"),
+    ai: str = typer.Argument("claude-vscode", help="AI assistant to integrate (claude-vscode, copilot)"),
 ):
     """Set up or re-run an AI assistant integration."""
     project_path = Path.cwd()
@@ -615,7 +624,7 @@ def integrate(
         console.print("[red]No .csdd/ directory found. Run 'csdd init' first.[/red]")
         raise typer.Exit(1)
 
-    if ai == "copilot":
+    if ai in ("claude-vscode", "copilot"):
         from claude_sdd_cli.integrations.copilot import CopilotIntegration
 
         integration = CopilotIntegration()
@@ -623,7 +632,8 @@ def integrate(
         # Stage new files so they aren't forgotten
         if is_git_repo(project_path):
             _stage_csdd_files(project_path)
-        console.print(f"[green]Copilot integration complete.[/green] {len(created)} files created/updated.")
+        label = "Claude (VS Code)" if ai == "claude-vscode" else "Copilot"
+        console.print(f"[green]{label} integration complete.[/green] {len(created)} files created/updated.")
         for f in created:
             rel = f.relative_to(project_path)
             console.print(f"  [dim]{rel}[/dim]")
@@ -650,7 +660,7 @@ def check():
     tracker.add("roadmap", "Feature Roadmap")
     tracker.add("templates", "Templates")
     tracker.add("scripts", "Scripts")
-    tracker.add("copilot", "Copilot skills")
+    tracker.add("skills", "VS Code slash-command skills")
     tracker.add("git", "Git repository")
 
     # Check .csdd/
@@ -705,19 +715,24 @@ def check():
     else:
         tracker.error("scripts", "No scripts found")
 
-    # Check copilot skills
+    # Check installed slash-command skills
     skills_dir = project_path / ".github" / "skills"
+    expected_skills = {
+        "vision", "tech-stack", "architecture", "roadmap", "specify",
+        "plan", "tasks", "clarify", "review", "trace", "constitution",
+    }
     if skills_dir.is_dir():
-        skill_count = sum(
-            1 for d in skills_dir.iterdir()
-            if d.is_dir() and d.name.startswith("csdd-") and (d / "SKILL.md").exists()
-        )
+        found = {
+            d.name for d in skills_dir.iterdir()
+            if d.is_dir() and (d / "SKILL.md").exists()
+        }
+        skill_count = len(found & expected_skills)
         if skill_count > 0:
-            tracker.complete("copilot", f"{skill_count} skill commands found")
+            tracker.complete("skills", f"{skill_count} skill commands found")
         else:
-            tracker.skip("copilot", "No skills found")
+            tracker.skip("skills", "No skills found")
     else:
-        tracker.skip("copilot", "Not configured")
+        tracker.skip("skills", "Not configured")
 
     # Check git
     if is_git_repo(project_path):

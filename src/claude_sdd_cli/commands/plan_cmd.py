@@ -129,8 +129,8 @@ Do NOT include any code, code fences, or executable content.
 ## Validation Approach
 (How the developer will verify the implementation works)
 
-## Claude CLI Implementation Guidance
-(High-level guidance for Claude CLI — what to build first, key decisions to make)
+## Human Implementation Guidance
+(High-level guidance for the human developer — what to build first, key decisions to make)
 """
     try:
         plan_content = ai.generate(plan_prompt, feature=feature_dir.name)

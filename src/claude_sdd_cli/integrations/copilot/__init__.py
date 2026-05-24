@@ -1,10 +1,12 @@
-"""Copilot integration -- GitHub Copilot in VS Code.
+"""VS Code chat integration -- Claude (VS Code extension) and Copilot Chat.
 
-Copilot has several unique behaviors:
+Both assistants share the same skill mechanism:
 - Skills use ``SKILL.md`` inside ``.github/skills/<name>/`` directories
-- Each skill becomes a ``/<name>`` slash command in Copilot Chat
+- Each skill becomes a ``/<name>`` slash command in chat
 - Installs ``.vscode/settings.json`` with prompt file recommendations
 - Context file lives at ``.github/copilot-instructions.md``
+  (retained as the canonical location for backward compatibility; Claude in
+  VS Code also reads it as project context)
 """
 
 from __future__ import annotations
@@ -17,11 +19,11 @@ from typing import Any
 
 
 class CopilotIntegration:
-    """Integration for GitHub Copilot in VS Code."""
+    """Integration for VS Code chat assistants (Claude extension and Copilot)."""
 
-    key = "copilot"
+    key = "claude-vscode"
     config = {
-        "name": "GitHub Copilot",
+        "name": "Claude (VS Code extension)",
         "folder": ".github/",
         "commands_subdir": "skills",
         "install_url": None,
@@ -212,17 +214,19 @@ class CopilotIntegration:
 
     @staticmethod
     def _generate_copilot_instructions(project_root: Path) -> str:
-        """Generate copilot-instructions.md content."""
+        """Generate the AI assistant instructions file content."""
         project_name = project_root.name
-        return f"""# Copilot Instructions -- {project_name}
+        return f"""# AI Assistant Instructions -- {project_name}
 
-This project follows **Claude SDD (Specification-Driven Development)**.
+This project follows **Claude SDD (Specification-Driven Development)** and is
+intended for use with **Claude in the VS Code extension**. Each
+`.github/skills/<name>/SKILL.md` becomes a `/<name>` slash command in chat.
 
-## Core Principle: Copilot Plans, Claude CLI Codes
+## Core Principle: Claude Plans, You Implement
 
-You (the AI assistant) are a **planning copilot**. You help the developer think
-through requirements, identify ambiguity, structure plans, and review work.
-Implementation tasks are sent to Claude CLI.
+You (the AI assistant) are a **planning assistant**. You help the developer
+think through requirements, identify ambiguity, structure plans, and review
+work. **The human writes all implementation code.**
 
 **You MUST NOT generate any executable code.** This includes:
 - No code in any programming language
@@ -230,47 +234,48 @@ Implementation tasks are sent to Claude CLI.
 - No shell commands or scripts
 - No configuration files (Dockerfiles, CI/CD, etc.)
 - No copy-paste-ready snippets
+- No patches or diffs
 
 **You MAY produce:**
 - Prose descriptions and explanations
 - Markdown tables and checklists
-- Structured specifications and plans
-- Task breakdowns with requirement traceability
-- Review reports and gap analyses
+- Structured specifications, plans, and acceptance criteria
+- Task breakdowns with requirement traceability and file paths (WHAT and WHERE, not HOW)
+- Review reports and gap analyses (as follow-up tasks, never patches)
 
 ## Workflow
 
 The recommended workflow is:
 
-1. `/csdd-constitution` -- Define project principles (done during init)
-2. `/csdd-vision` -- Define the product vision
-3. `/csdd-tech-stack` -- Define the technology stack
-4. `/csdd-architecture` -- Define the application architecture
-5. `/csdd-roadmap` -- Define ALL features needed to realize the product
+1. `/constitution` -- Define project principles (done during init)
+2. `/vision` -- Define the product vision
+3. `/tech-stack` -- Define the technology stack
+4. `/architecture` -- Define the application architecture
+5. `/roadmap` -- Define ALL features needed to realize the product
 6. For EACH feature from the roadmap:
-   - `/csdd-specify` -- Create a feature specification
-   - `/csdd-clarify` -- Find ambiguity and contradictions
-   - `/csdd-plan` -- Generate a technical planning package
-   - `/csdd-tasks` -- Create a human execution checklist
-   - CLAUDE CLI IMPLEMENTS the feature
-   - `/csdd-review` -- Compare implementation against spec
-   - `/csdd-trace` -- Map requirements to tasks
+   - `/specify` -- Create a feature specification
+   - `/clarify` -- Find ambiguity and contradictions
+   - `/plan` -- Generate a technical planning package (prose only)
+   - `/tasks` -- Create a human implementation checklist
+   - THE HUMAN IMPLEMENTS the feature by hand
+   - `/review` -- Compare implementation against spec
+   - `/trace` -- Map requirements to tasks
 
 ## Available Skills (Slash Commands)
 
-Type `/` in Copilot Chat and select a skill:
+Type `/` in the VS Code chat panel and select a skill:
 
-- `/csdd-vision` -- Define the product vision (what, who, why)
-- `/csdd-tech-stack` -- Define the technology stack (languages, frameworks, databases, tooling)
-- `/csdd-architecture` -- Define the application architecture (structure, layers, components)
-- `/csdd-roadmap` -- Define ALL features needed to realize the product
-- `/csdd-specify` -- Create a feature specification from a natural language description
-- `/csdd-plan` -- Generate a technical planning package (prose only)
-- `/csdd-tasks` -- Create a human execution checklist
-- `/csdd-clarify` -- Find ambiguity and contradictions in specs
-- `/csdd-review` -- Compare implementation against spec
-- `/csdd-trace` -- Map requirements to tasks and check coverage
-- `/csdd-constitution` -- Create or update the project constitution
+- `/vision` -- Define the product vision (what, who, why)
+- `/tech-stack` -- Define the technology stack (languages, frameworks, databases, tooling)
+- `/architecture` -- Define the application architecture (structure, layers, components)
+- `/roadmap` -- Define ALL features needed to realize the product
+- `/specify` -- Create a feature specification from a natural language description
+- `/plan` -- Generate a technical planning package (prose only)
+- `/tasks` -- Create a human implementation checklist
+- `/clarify` -- Find ambiguity and contradictions in specs
+- `/review` -- Compare implementation against spec
+- `/trace` -- Map requirements to tasks and check coverage
+- `/constitution` -- Create or update the project constitution
 
 ## Project Structure
 
@@ -281,12 +286,12 @@ Type `/` in Copilot Chat and select a skill:
 - `.csdd/memory/feature-roadmap.md` -- Feature roadmap
 - `.csdd/templates/` -- Markdown templates for specs, plans, tasks, etc.
 - `specs/` -- Feature specifications and planning artifacts
-- `.github/skills/` -- Copilot skill files (slash commands)
+- `.github/skills/` -- Slash-command skill files (`SKILL.md`)
 
 ## The 8 Articles
 
 1. Specification-First Principle
-2. Claude CLI Implementation Mandate
+2. Human Implementation Mandate
 3. AI Planning-Only Mandate
 4. Ambiguity Marking Requirement
 5. Traceability Requirement

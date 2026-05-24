@@ -88,11 +88,11 @@ def _default_constitution(name: str) -> str:
 Every feature begins with a structured specification before implementation starts.
 Requirements, user stories, edge cases, and success criteria are defined first.
 
-## Article 2: Claude CLI Implementation Mandate
-All executable project artifacts must be implemented via Claude CLI. The planning AI (Copilot) may not generate implementation code, test code, infrastructure code, migration code, build scripts, configuration code, or any other executable artifact. Claude CLI is the sole implementer.
+## Article 2: Human Implementation Mandate
+All executable project artifacts must be implemented by the human developer. The planning AI (Claude in the VS Code extension) may not generate implementation code, test code, infrastructure code, migration code, build scripts, configuration code, or any other executable artifact. The human is the sole implementer.
 
 ## Article 3: AI Planning-Only Mandate
-The planning AI (Copilot) participation is restricted to requirement clarification, research, planning,
+The planning AI (Claude in the VS Code extension) participation is restricted to requirement clarification, research, planning,
 task decomposition, review commentary, consistency checking, and traceability support.
 
 ## Article 4: Ambiguity Marking Requirement
@@ -108,9 +108,9 @@ The tool emphasizes validation, consistency checking, and review.
 When gaps are found, the output is follow-up tasks and questions — not code patches.
 
 ## Article 7: No Executable Planning AI Output Rule
-Any planning AI (Copilot) artifact containing executable code, code fences with implementation
+Any planning AI (Claude in the VS Code extension) artifact containing executable code, code fences with implementation
 content, or copy-paste-ready source/config/test content must be rejected or quarantined.
-Tasks are intended for Claude CLI to implement.
+Tasks are intended for the human to implement.
 
 ## Article 8: Transparency and Auditability
 Prompt and response history is preserved for review. Every planning decision
@@ -123,25 +123,25 @@ def _default_doc(doc_type: str, name: str) -> str:
         return f"""# Philosophy — {name}
 
 This project follows **Claude SDD (Specification-Driven Development)**, a workflow
-where specifications drive development, but Claude CLI implements all code based on planning artifacts.
+where specifications drive development, but the human implements all code based on planning artifacts.
 
 ## Why?
 
 - Specifications should be the source of truth.
-- AI (Copilot) strengthens thinking, Claude CLI implements.
-- Clear specifications guide Claude CLI implementation.
+- Claude strengthens thinking; the human implements.
+- Clear specifications guide human implementation.
 - Planning support should be structured and disciplined, not automated.
 
 ## The AI's Role
 
-The planning AI (Copilot) acts as a **planning copilot**: it helps you think through requirements,
+The planning AI (Claude in the VS Code extension) acts as a **planning assistant**: it helps you think through requirements,
 identify ambiguity, structure plans, and review your work. It never writes code.
-Claude CLI implements the tasks.
+the human implements the tasks.
 
 ## The Developer's Role
 
-Claude CLI handles all implementation. Every function, test, config, and migration is implemented by Claude CLI from the planning artifacts.
-Copilot helps plan; Claude CLI builds.
+The human handles all implementation. Every function, test, config, and migration is implemented by the human from the planning artifacts.
+Claude plans; the human builds.
 """
     else:  # workflow
         return f"""# Workflow — {name}
@@ -161,10 +161,10 @@ Run `sdd plan --feature <name>` to generate a technical planning package.
 Produces plan.md, research.md, data-model.md, contracts, and quickstart.md.
 
 ## Phase 5: Tasks
-Run `sdd tasks --feature <name>` to create a Claude CLI execution checklist.
+Run `sdd tasks --feature <name>` to create a human implementation checklist.
 
 ## Phase 6: Implement
-Claude CLI implements the code based on the task breakdown.
+the human implements the code based on the task breakdown.
 
 ## Phase 7: Review
 Run `sdd review --feature <name>` to compare your implementation against the spec.

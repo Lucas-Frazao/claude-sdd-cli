@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **Simplified slash-command names**: `/csdd.vision` → `/vision`, `/csdd.tech-stack` → `/tech-stack`, etc. for all 11 commands.
+- **VS Code Claude extension focus**: Project is now oriented around Claude in the VS Code extension; AI assistant key is `claude-vscode` (Copilot retained as a legacy option since both share the same `.github/skills/` mechanism).
+- **Planning-only, human-implemented**: Constitution Article 2 renamed to "Human Implementation Mandate". All skill prompts, templates, and docs now explicitly forbid code, snippets, patches, and diffs — outputs are prose-only planning material (specs, plans, tasks with acceptance criteria, reviews).
+- Renamed `.github/skills/csdd-*` directories to `.github/skills/<name>` so the slash commands map directly without prefix.
+- Updated AI assistant instructions file content to reflect the new naming and the human-implements mandate.
+
 ## [0.2.0] -- 2026-04-08
 
 ### Changed

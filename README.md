@@ -1,16 +1,14 @@
 # Claude SDD CLI
 
-**A specification-driven development CLI where Copilot plans and Claude CLI implements.**
-
-AI plans, Claude codes.
+**A specification-driven development CLI for use with Claude in the VS Code extension. Claude plans; you implement.**
 
 ---
 
 ## What Is This?
 
-This tool brings spec-driven development to GitHub Copilot with one foundational rule: **AI plans, Claude CLI implements from planning artifacts**. Specifications drive development. AI produces specs, plans, task breakdowns, and reviews -- all in prose. Claude CLI implements everything from the planning artifacts.
+This tool brings spec-driven development to **Claude in the VS Code extension** with one foundational rule: **the AI plans, the human implements**. Specifications drive development. Claude produces specs, plans, task breakdowns, and reviews — all in prose. You write every line of code yourself.
 
-The result is a disciplined workflow where every feature starts with a specification, gets planned in prose, becomes a Claude CLI task checklist, and gets reviewed against the spec after Claude CLI builds it.
+The result is a disciplined workflow where every feature starts with a specification, gets planned in prose, becomes a human-implementation checklist, and gets reviewed against the spec after you build it.
 
 ## Install
 
@@ -34,47 +32,46 @@ csdd init my-project
 
 This creates:
 - `.csdd/` directory with constitution, templates, and scripts
-- `.github/agents/` with Copilot agent commands (`csdd.*.agent.md`)
-- `.github/prompts/` with companion prompt files
-- `.github/copilot-instructions.md` with project context
-- `.vscode/settings.json` with prompt file recommendations
+- `.github/skills/<name>/SKILL.md` — slash-command skills (`/vision`, `/plan`, etc.)
+- `.github/copilot-instructions.md` — project context loaded by VS Code chat
+- `.vscode/settings.json` — chat prompt recommendations
 
-### 2. Open in VS Code with Copilot
+### 2. Open in VS Code with the Claude extension
 
-Open the project in VS Code and use Copilot Chat with these commands:
+Open the project in VS Code, open the Claude chat panel, and type `/` to discover the slash commands.
 
 | Command | What it does |
 |---------|-------------|
-| `/csdd.vision` | Define the product vision -- what it is, who it's for, why it matters |
-| `/csdd.tech-stack` | Define the technology stack -- languages, frameworks, databases, tooling |
-| `/csdd.architecture` | Define the application architecture -- structure, layers, components |
-| `/csdd.roadmap` | Define ALL features needed to realize the product vision |
-| `/csdd.specify` | Create a feature specification from a natural language description |
-| `/csdd.plan` | Generate a technical planning package (prose only, no code) |
-| `/csdd.tasks` | Create a Claude CLI execution checklist |
-| `/csdd.clarify` | Find ambiguity and contradictions in specs |
-| `/csdd.review` | Compare the implementation against the spec |
-| `/csdd.trace` | Map requirements to tasks and check coverage |
-| `/csdd.constitution` | Create or update the project constitution |
+| `/vision` | Define the product vision — what it is, who it's for, why it matters |
+| `/tech-stack` | Define the technology stack — languages, frameworks, databases, tooling |
+| `/architecture` | Define the application architecture — structure, layers, components |
+| `/roadmap` | Define ALL features needed to realize the product vision |
+| `/specify` | Create a feature specification from a natural language description |
+| `/plan` | Generate a technical planning package (prose only, no code) |
+| `/tasks` | Create a human implementation checklist |
+| `/clarify` | Find ambiguity and contradictions in specs |
+| `/review` | Compare the implementation against the spec |
+| `/trace` | Map requirements to tasks and check coverage |
+| `/constitution` | Create or update the project constitution |
 
 ### 3. The Workflow
 
 ```
-  /csdd.vision --> /csdd.tech-stack --> /csdd.architecture --> /csdd.roadmap --> For EACH feature:
-      /csdd.specify --> /csdd.clarify --> /csdd.plan --> /csdd.tasks --> CLAUDE CLI IMPLEMENTS --> /csdd.review
+  /vision --> /tech-stack --> /architecture --> /roadmap --> For EACH feature:
+      /specify --> /clarify --> /plan --> /tasks --> YOU IMPLEMENT BY HAND --> /review
 ```
 
-1. **Vision**: Define the product vision -- what it is, who it's for, and why.
-2. **Tech Stack**: Define the technology stack -- languages, frameworks, databases, and tooling.
-3. **Architecture**: Define the application architecture -- structure, layers, components, and data flow.
+1. **Vision**: Define the product vision — what it is, who it's for, and why.
+2. **Tech Stack**: Define the technology stack — languages, frameworks, databases, and tooling.
+3. **Architecture**: Define the application architecture — structure, layers, components, and data flow.
 4. **Roadmap**: Define ALL features needed to build the product.
 5. **For each feature from the roadmap:**
-   1. **Specify**: Describe the feature. AI creates a structured spec.
-   2. **Clarify**: AI finds ambiguity and contradictions in the spec.
-   3. **Plan**: AI generates research, data models, contracts -- all in prose, no code.
-   4. **Tasks**: AI creates a sequenced, traceable checklist for Claude CLI.
-   5. **Claude CLI Implements**: Claude CLI implements from planning artifacts. That's the point.
-   6. **Review**: AI compares the implementation against the spec. Produces follow-up tasks, not patches.
+   1. **Specify**: Describe the feature. Claude creates a structured spec.
+   2. **Clarify**: Claude finds ambiguity and contradictions in the spec.
+   3. **Plan**: Claude generates research, data models, contracts — all in prose, no code.
+   4. **Tasks**: Claude creates a sequenced, traceable checklist with acceptance criteria for you.
+   5. **You implement**: You write every line of code by hand, guided by the planning artifacts.
+   6. **Review**: Claude compares your implementation against the spec. Produces follow-up tasks, not patches.
 
 ## Project Structure
 
@@ -85,10 +82,10 @@ my-project/
 ├── .csdd/
 │   ├── memory/
 │   │   ├── constitution.md          # The 8 Articles
-│   │   ├── product-vision.md        # Product vision document
-│   │   ├── tech-stack.md            # Technology stack decisions
-│   │   ├── architecture.md          # Application architecture
-│   │   └── feature-roadmap.md       # Feature roadmap
+│   │   ├── product-vision.md
+│   │   ├── tech-stack.md
+│   │   ├── architecture.md
+│   │   └── feature-roadmap.md
 │   ├── templates/
 │   │   ├── spec-template.md
 │   │   ├── plan-template.md
@@ -104,17 +101,17 @@ my-project/
 │   └── init-options.json
 ├── .github/
 │   ├── skills/
-│   │   ├── csdd-vision/SKILL.md
-│   │   ├── csdd-tech-stack/SKILL.md
-│   │   ├── csdd-architecture/SKILL.md
-│   │   ├── csdd-roadmap/SKILL.md
-│   │   ├── csdd-specify/SKILL.md
-│   │   ├── csdd-plan/SKILL.md
-│   │   ├── csdd-tasks/SKILL.md
-│   │   ├── csdd-clarify/SKILL.md
-│   │   ├── csdd-review/SKILL.md
-│   │   ├── csdd-trace/SKILL.md
-│   │   └── csdd-constitution/SKILL.md
+│   │   ├── vision/SKILL.md
+│   │   ├── tech-stack/SKILL.md
+│   │   ├── architecture/SKILL.md
+│   │   ├── roadmap/SKILL.md
+│   │   ├── specify/SKILL.md
+│   │   ├── plan/SKILL.md
+│   │   ├── tasks/SKILL.md
+│   │   ├── clarify/SKILL.md
+│   │   ├── review/SKILL.md
+│   │   ├── trace/SKILL.md
+│   │   └── constitution/SKILL.md
 │   └── copilot-instructions.md
 ├── .vscode/
 │   └── settings.json
@@ -135,33 +132,33 @@ my-project/
 
 Every project gets a constitution with 8 non-negotiable articles:
 
-1. **Specification-First** -- Specs before code.
-2. **Claude CLI Implementation** -- Claude CLI implements all code from planning artifacts.
-3. **AI Planning-Only** -- AI clarifies, researches, plans, and reviews.
-4. **Ambiguity Marking** -- Unclear requirements get `[NEEDS CLARIFICATION]`.
-5. **Traceability** -- Tasks map to requirements, reviews map to specs.
-6. **Review Over Regeneration** -- Gaps produce follow-up tasks, not code.
-7. **No Executable Planning AI Output** -- Code fences and snippets are rejected from planning artifacts.
-8. **Transparency** -- Audit trail for all AI interactions.
+1. **Specification-First** — Specs before code.
+2. **Human Implementation** — The human writes all code; AI never generates it.
+3. **AI Planning-Only** — Claude clarifies, researches, plans, and reviews.
+4. **Ambiguity Marking** — Unclear requirements get `[NEEDS CLARIFICATION]`.
+5. **Traceability** — Tasks map to requirements, reviews map to specs.
+6. **Review Over Regeneration** — Gaps produce follow-up tasks, not code.
+7. **No Executable Planning AI Output** — Code fences and snippets are rejected from planning artifacts.
+8. **Transparency** — Audit trail for all AI interactions.
 
 ## CLI Commands
 
 ```bash
-csdd init <project-name>   # Initialize a new project
-csdd init --here            # Initialize in current directory
-csdd vision                 # Define the product vision
-csdd tech-stack             # Define the technology stack
-csdd architecture           # Define the application architecture
-csdd roadmap                # Define the feature roadmap
-csdd specify                # Create a feature specification
-csdd clarify                # Analyze specs for ambiguity
-csdd plan                   # Generate a technical plan
-csdd tasks                  # Create a Claude CLI execution checklist
-csdd review                 # Review implementation against spec
-csdd trace                  # Map requirements to tasks
-csdd integrate copilot      # Re-run Copilot integration
-csdd check                  # Verify project setup
-csdd version                # Show version
+csdd init <project-name>    # Initialize a new project
+csdd init --here             # Initialize in current directory
+csdd vision                  # Define the product vision
+csdd tech-stack              # Define the technology stack
+csdd architecture            # Define the application architecture
+csdd roadmap                 # Define the feature roadmap
+csdd specify                 # Create a feature specification
+csdd clarify                 # Analyze specs for ambiguity
+csdd plan                    # Generate a technical plan
+csdd tasks                   # Create a human implementation checklist
+csdd review                  # Review implementation against spec
+csdd trace                   # Map requirements to tasks
+csdd integrate claude-vscode # Re-run VS Code integration
+csdd check                   # Verify project setup
+csdd version                 # Show version
 ```
 
 ## How It Differs from spec-kit
@@ -170,24 +167,24 @@ csdd version                # Show version
 |------|----------|----------------|
 | Source of truth | Specification | Specification |
 | AI role | Planning + code generation | Planning and review only |
-| Code authorship | AI may generate code | Claude CLI implements all code |
-| Constitution | Architectural discipline | Same + implementation from planning artifacts mandate |
-| Tasks output | Ready for an AI agent | Ready for Claude CLI |
+| Code authorship | AI may generate code | The human implements all code |
+| Constitution | Architectural discipline | Same + planning-only mandate |
+| Tasks output | Ready for an AI agent | Ready for a human developer |
 | Output validation | None | No-code validator on every artifact |
 | Review model | Regeneration flow | Gap analysis without code fixes |
-| Namespace | `speckit.*` | `csdd-*` |
+| Target surface | CLI agent | Claude in VS Code chat |
 
 ## Why?
 
-Specifications should drive development. When coupled with structured planning artifacts, Claude CLI can implement features with full context -- specifications, data models, contracts, and task breakdowns all guide the implementation.
+Specifications should drive development. Coupled with structured planning artifacts — vision, tech stack, architecture, spec, plan, tasks — a developer can implement features deliberately, with full context and clear acceptance criteria, while keeping AI confined to thinking and planning.
 
-This tool preserves the strongest idea from SDD -- that specifications should drive development -- while ensuring **structured, traceable implementation from planning artifacts**.
+This tool preserves the strongest idea from SDD — that specifications should drive development — while making the **human the sole implementer** and Claude a disciplined planning partner.
 
 Built for:
-- **Solo developers** who want strong planning support with Claude CLI implementation
+- **Solo developers** who want strong planning support without AI-generated code
 - **Students** who want to learn architecture and implementation deeply
 - **Engineers** who want an auditable, specification-first workflow
-- **Teams** experimenting with AI-assisted planning where Claude CLI implements from structured artifacts
+- **Teams** using Claude in VS Code who want planning rigor without ceding code authorship
 
 ## Development
 
@@ -202,7 +199,7 @@ pytest
 
 Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-This project will not accept contributions that generate executable code or bypass the constitution.
+This project will not accept contributions that allow the AI to generate executable code or bypass the constitution.
 
 ## License
 

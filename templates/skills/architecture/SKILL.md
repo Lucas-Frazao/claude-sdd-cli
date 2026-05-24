@@ -1,5 +1,5 @@
 ---
-name: csdd-architecture
+name: architecture
 description: "Define the application architecture — structure, layers, components, data flow, and design patterns. Use when setting up or updating the project's application architecture."
 argument-hint: "[architectural preferences or constraints]"
 ---
@@ -13,15 +13,15 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, copy-paste-ready snippets, patches, or diffs. Implementation is the human's job — your output is prose-only planning material. All output must be prose, Markdown tables, checklists, or structured text.
 
-The text the user typed after `/csdd-architecture` in the triggering message provides additional context about architectural preferences. Use it along with the product vision and tech stack to define the architecture.
+The text the user typed after `/architecture` in the triggering message provides additional context about architectural preferences. Use it along with the product vision and tech stack to define the architecture.
 
 Given the product context, do this:
 
-1. **Read the product vision** at `.csdd/memory/product-vision.md`. If it does not exist, warn the user and suggest running `/csdd-vision` first. You can still proceed if the user provides sufficient context.
+1. **Read the product vision** at `.csdd/memory/product-vision.md`. If it does not exist, warn the user and suggest running `/vision` first. You can still proceed if the user provides sufficient context.
 
-2. **Read the tech stack** at `.csdd/memory/tech-stack.md`. If it does not exist, warn the user and suggest running `/csdd-tech-stack` first. You can still proceed if the user provides sufficient context.
+2. **Read the tech stack** at `.csdd/memory/tech-stack.md`. If it does not exist, warn the user and suggest running `/tech-stack` first. You can still proceed if the user provides sufficient context.
 
 3. **Read the constitution** at `.csdd/memory/constitution.md` for project principles.
 
@@ -93,7 +93,7 @@ Given the product context, do this:
 8. **Report completion** with:
    - Summary of the architecture
    - Any [NEEDS CLARIFICATION] items that need answers
-   - Suggestion to proceed with `/csdd-roadmap` to define features
+   - Suggestion to proceed with `/roadmap` to define features
 
 ## Quick Guidelines
 

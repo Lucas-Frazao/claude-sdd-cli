@@ -1,5 +1,5 @@
 ---
-name: csdd-constitution
+name: constitution
 description: "Create or update the project constitution from interactive or provided principle inputs, ensuring all dependent templates stay in sync. Use to establish or amend project governance principles."
 argument-hint: "[principle updates or amendments]"
 ---
@@ -15,14 +15,14 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 You are updating the project constitution at `.csdd/memory/constitution.md`. This file is a TEMPLATE containing placeholder tokens in square brackets (e.g. `[PROJECT_NAME]`, `[PRINCIPLE_1_NAME]`). Your job is to (a) collect/derive concrete values, (b) fill the template precisely, and (c) propagate any amendments across dependent artifacts.
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text. This applies to the constitution and all dependent artifacts.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, copy-paste-ready snippets, patches, or diffs. Implementation is the human's job — your output is prose-only planning material. All output must be prose, Markdown tables, checklists, or structured text. This applies to the constitution and all dependent artifacts.
 
 **Note**: If `.csdd/memory/constitution.md` does not exist yet, it should have been initialized from `.csdd/templates/constitution-template.md` during project setup. If it's missing, copy the template first.
 
 The constitution MUST include these 8 foundational articles:
 
 1. **Article 1: Specification-First Principle** -- Every feature begins with a structured specification before implementation starts.
-2. **Article 2: Claude CLI Implementation Mandate** -- All executable project artifacts must be authored by Claude CLI. AI may not generate implementation code, test code, infrastructure code, migration code, build scripts, configuration code, or any other executable artifact.
+2. **Article 2: Human Implementation Mandate** -- All executable project artifacts must be authored by the human. AI may not generate implementation code, test code, infrastructure code, migration code, build scripts, configuration code, or any other executable artifact.
 3. **Article 3: AI Planning-Only Mandate** -- AI participation is restricted to requirement clarification, research, planning, task decomposition, review commentary, consistency checking, and traceability support.
 4. **Article 4: Ambiguity Marking Requirement** -- When requirements are ambiguous or underspecified, mark them with [NEEDS CLARIFICATION] rather than guessing.
 5. **Article 5: Traceability Requirement** -- Each task must map to one or more requirements. Each review finding must reference a requirement, contract, or planning decision.

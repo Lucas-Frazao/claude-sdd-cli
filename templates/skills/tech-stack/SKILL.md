@@ -1,6 +1,6 @@
 ---
-name: csdd-tech-stack
-description: "Define the technology stack — languages, frameworks, databases, and tooling decisions with rationale. Use after /csdd-vision to establish technical foundations."
+name: tech-stack
+description: "Define the technology stack — languages, frameworks, databases, and tooling decisions with rationale. Use after /vision to establish technical foundations."
 argument-hint: "[technology preferences or constraints]"
 ---
 ## User Input
@@ -13,13 +13,13 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, copy-paste-ready snippets, patches, or diffs. Implementation is the human's job — your output is prose-only planning material. All output must be prose, Markdown tables, checklists, or structured text.
 
-The text the user typed after `/csdd-tech-stack` in the triggering message provides additional context about technology preferences. Use it along with the product vision to define the tech stack.
+The text the user typed after `/tech-stack` in the triggering message provides additional context about technology preferences. Use it along with the product vision to define the tech stack.
 
 Given the product context, do this:
 
-1. **Read the product vision** at `.csdd/memory/product-vision.md`. If it does not exist, warn the user and suggest running `/csdd-vision` first. You can still proceed if the user provides sufficient context.
+1. **Read the product vision** at `.csdd/memory/product-vision.md`. If it does not exist, warn the user and suggest running `/vision` first. You can still proceed if the user provides sufficient context.
 
 2. **Read the constitution** at `.csdd/memory/constitution.md` for project principles.
 
@@ -85,7 +85,7 @@ Given the product context, do this:
 7. **Report completion** with:
    - Summary of key technology choices
    - Any [NEEDS CLARIFICATION] items that need answers
-   - Suggestion to proceed with `/csdd-architecture` to define the application architecture
+   - Suggestion to proceed with `/architecture` to define the application architecture
 
 ## Quick Guidelines
 

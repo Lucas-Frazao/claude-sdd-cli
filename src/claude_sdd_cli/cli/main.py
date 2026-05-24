@@ -22,7 +22,7 @@ def cli():
     """Claude SDD -- Specification-Driven Development CLI.
 
     A planning copilot that helps write specs, plans, and tasks —
-    then Claude CLI implements them.
+    then the human implements them.
     """
 
 
