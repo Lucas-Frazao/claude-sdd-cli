@@ -1,16 +1,16 @@
 {
     "chat.promptFilesRecommendations": {
-        "csdd-constitution": true,
-        "csdd-specify": true,
-        "csdd-plan": true,
-        "csdd-tasks": true,
-        "csdd-clarify": true,
-        "csdd-review": true,
-        "csdd-trace": true,
-        "csdd-vision": true,
-        "csdd-tech-stack": true,
-        "csdd-architecture": true,
-        "csdd-roadmap": true
+        "constitution": true,
+        "specify": true,
+        "plan": true,
+        "tasks": true,
+        "clarify": true,
+        "review": true,
+        "trace": true,
+        "vision": true,
+        "tech-stack": true,
+        "architecture": true,
+        "roadmap": true
     },
     "chat.tools.terminal.autoApprove": {
         ".csdd/scripts/bash/": true

@@ -21,8 +21,8 @@ from claude_sdd_cli.commands.architecture_cmd import architecture_cmd
 def cli():
     """Claude SDD -- Specification-Driven Development CLI.
 
-    A planning copilot that helps write specs, plans, and tasks —
-    then Claude CLI implements them.
+    A planning assistant (Claude in the VS Code extension) that helps write
+    specs, plans, and tasks — then the human implements them by hand.
     """
 
 

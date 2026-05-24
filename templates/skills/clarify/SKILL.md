@@ -1,6 +1,6 @@
 ---
-name: csdd-clarify
-description: "Identify underspecified areas in the current feature spec by asking up to 5 targeted clarification questions and encoding answers back into the spec. Use after /csdd-specify and before /csdd-plan."
+name: clarify
+description: "Identify underspecified areas in the current feature spec by asking up to 5 targeted clarification questions and encoding answers back into the spec. Use after /specify and before /plan."
 argument-hint: "[feature name or spec path]"
 ---
 ## User Input
@@ -17,11 +17,11 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 Goal: Detect and reduce ambiguity or missing decision points in the active feature specification and record the clarifications directly in the spec file.
 
-Note: This clarification workflow is expected to run (and be completed) BEFORE invoking `/csdd-plan`. If the user explicitly states they are skipping clarification, you may proceed, but must warn that downstream rework risk increases.
+Note: This clarification workflow is expected to run (and be completed) BEFORE invoking `/plan`. If the user explicitly states they are skipping clarification, you may proceed, but must warn that downstream rework risk increases.
 
 Execution steps:
 
-1. Locate the current feature spec file in the `specs/` directory. If no spec exists, instruct user to run `/csdd-specify` first.
+1. Locate the current feature spec file in the `specs/` directory. If no spec exists, instruct user to run `/specify` first.
 
 2. Load the current spec file. Perform a structured ambiguity & coverage scan using this taxonomy. For each category, mark status: Clear / Partial / Missing.
 
@@ -92,10 +92,10 @@ Execution steps:
    - Path to updated spec
    - Sections touched
    - Coverage summary table
-   - Suggested next command (`/csdd-plan`)
+   - Suggested next command (`/plan`)
 
 Behavior rules:
 - If no meaningful ambiguities found, respond: "No critical ambiguities detected." and suggest proceeding
-- If spec file missing, instruct user to run `/csdd-specify` first
+- If spec file missing, instruct user to run `/specify` first
 - Never exceed 5 total asked questions
 - Do NOT generate any code, code fences, or implementation snippets

@@ -1,5 +1,5 @@
 ---
-name: csdd-specify
+name: specify
 description: "Create or update a feature specification from a natural language feature description. Use to start the per-feature development pipeline."
 argument-hint: "[feature description in natural language]"
 ---
@@ -13,9 +13,9 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text. Focus on WHAT and WHY, never HOW to implement.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, copy-paste-ready snippets, patches, or diffs. Implementation is the human's job — your output is prose-only planning material. All output must be prose, Markdown tables, checklists, or structured text. Focus on WHAT and WHY, never HOW to implement.
 
-The text the user typed after `/csdd-specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `$ARGUMENTS` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
+The text the user typed after `/specify` in the triggering message **is** the feature description. Assume you always have it available in this conversation even if `$ARGUMENTS` appears literally below. Do not ask the user to repeat it unless they provided an empty command.
 
 Given that feature description, do this:
 
@@ -102,7 +102,7 @@ Given that feature description, do this:
         **Your choice**: _[Wait for user response]_
         ```
 
-7. Report completion with branch name, spec file path, and readiness for the next phase (`/csdd-clarify` or `/csdd-plan`).
+7. Report completion with branch name, spec file path, and readiness for the next phase (`/clarify` or `/plan`).
 
 ## Quick Guidelines
 

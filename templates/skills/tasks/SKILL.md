@@ -1,6 +1,6 @@
 ---
-name: csdd-tasks
-description: "Create a Claude CLI execution checklist from the technical plan. Produces sequenced, traceable tasks for Claude CLI to implement. Use after /csdd-plan."
+name: tasks
+description: "Create a human implementation checklist from the technical plan. Produces sequenced, traceable tasks with acceptance criteria for the human to implement by hand. Use after /plan."
 argument-hint: "[feature name]"
 ---
 ## User Input
@@ -13,7 +13,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant. The tasks you generate are for Claude CLI to implement. Do NOT generate any code, code fences, or implementation snippets. Each task describes WHAT to implement and WHERE, not HOW. Claude CLI writes every line of code.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant. The tasks you generate are for a human developer to implement by hand. Do NOT generate any code, code fences, patches, diffs, or implementation snippets. Each task describes WHAT to implement and WHERE, plus acceptance criteria — never HOW (no algorithms, no framework calls, no copy-pasteable content). The human writes every line of code.
 
 1. **Load design documents**: Read from the feature directory:
    - **Required**: plan.md (technical direction), spec.md (user stories with priorities)
@@ -50,7 +50,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Task Generation Rules
 
-**CRITICAL**: Tasks are for Claude CLI. They describe WHAT to build, not HOW.
+**CRITICAL**: Tasks are for the human. They describe WHAT to build, not HOW.
 
 ### Checklist Format (REQUIRED)
 
@@ -103,4 +103,4 @@ Every task MUST strictly follow this format:
 Between major phases, include validation checkpoint tasks:
 - `- [ ] TASK-NNN: Validate Phase X outputs against spec requirements (traces: REQ-XXX)`
 
-These remind Claude CLI to check work against the spec before proceeding.
+These remind the human to check work against the spec before proceeding.

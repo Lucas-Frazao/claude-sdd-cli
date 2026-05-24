@@ -2,10 +2,10 @@
 description: Define ALL features needed to realize the product vision as a structured feature roadmap.
 handoffs:
   - label: Specify a Feature
-    agent: csdd.specify
+    agent: specify
     prompt: Create a specification for feature FEAT-XXX from the roadmap. I want to build...
   - label: Update Product Vision
-    agent: csdd.vision
+    agent: vision
     prompt: Update the product vision based on insights from roadmap planning.
 ---
 
@@ -19,13 +19,13 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, copy-paste-ready snippets, patches, or diffs. Implementation is the human's job — your output is prose-only planning material. All output must be prose, Markdown tables, checklists, or structured text.
 
-The text the user typed after `/csdd.roadmap` in the triggering message provides additional context. Use it along with the product vision to define the feature roadmap.
+The text the user typed after `/roadmap` in the triggering message provides additional context. Use it along with the product vision to define the feature roadmap.
 
 Given the product context, do this:
 
-1. **Read the product vision** at `.csdd/memory/product-vision.md`. If it does not exist, warn the user and suggest running `/csdd.vision` first. You can still proceed if the user provides sufficient context.
+1. **Read the product vision** at `.csdd/memory/product-vision.md`. If it does not exist, warn the user and suggest running `/vision` first. You can still proceed if the user provides sufficient context.
 
 2. **Read the tech stack** at `.csdd/memory/tech-stack.md` for technology decisions. If it does not exist, note that the tech stack has not been defined yet.
 
@@ -85,8 +85,8 @@ Given the product context, do this:
    - Any [NEEDS CLARIFICATION] items
    - Instructions to begin the per-feature spec pipeline:
      - Pick a feature from the roadmap (start with Phase 1, High priority)
-     - Run `/csdd.specify` with the feature description
-     - Then follow: clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review
+     - Run `/specify` with the feature description
+     - Then follow: clarify -> plan -> tasks -> YOU IMPLEMENT BY HAND -> review
      - Repeat for each feature
 
 ## Quick Guidelines

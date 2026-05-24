@@ -61,7 +61,7 @@ Execution steps:
    - Number of gaps
    - Number of orphan tasks
    - Recommendation:
-     - If gaps exist: create additional tasks via `/csdd.tasks`
+     - If gaps exist: create additional tasks via `/tasks`
      - If orphan tasks exist: review whether they map to undocumented requirements
      - If coverage > 80%: ready for implementation or review
 

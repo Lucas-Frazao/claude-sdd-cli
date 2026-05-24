@@ -1,6 +1,6 @@
 ---
-name: csdd-trace
-description: "Map requirements to tasks and check coverage, producing a traceability matrix. Use after /csdd-review to verify all requirements are addressed."
+name: trace
+description: "Map requirements to tasks and check coverage, producing a traceability matrix. Use after /review to verify all requirements are addressed."
 argument-hint: "[feature name]"
 ---
 ## User Input
@@ -62,7 +62,7 @@ Execution steps:
    - Number of gaps
    - Number of orphan tasks
    - Recommendation:
-     - If gaps exist: create additional tasks via `/csdd-tasks`
+     - If gaps exist: create additional tasks via `/tasks`
      - If orphan tasks exist: review whether they map to undocumented requirements
      - If coverage > 80%: ready for implementation or review
 

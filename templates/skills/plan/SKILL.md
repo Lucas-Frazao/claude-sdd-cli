@@ -1,6 +1,6 @@
 ---
-name: csdd-plan
-description: "Execute the implementation planning workflow to generate design artifacts — ALL IN PROSE, no code. Produces research, data model, contracts, and quickstart documents. Use after /csdd-clarify."
+name: plan
+description: "Execute the implementation planning workflow to generate design artifacts — ALL IN PROSE, no code. Produces research, data model, contracts, and quickstart documents. Use after /clarify."
 argument-hint: "[feature name]"
 ---
 ## User Input
@@ -13,7 +13,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. Do NOT generate any code, code fences, or implementation snippets. All design artifacts (research.md, data-model.md, contracts/, quickstart.md) must be written entirely in prose, Markdown tables, and structured text. Claude CLI writes ALL code.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. Do NOT generate any code, code fences, or implementation snippets. All design artifacts (research.md, data-model.md, contracts/, quickstart.md) must be written entirely in prose, Markdown tables, and structured text. The human writes ALL code.
 
 1. **Setup**: Run `.csdd/scripts/bash/` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH.
 
@@ -75,5 +75,5 @@ You **MUST** consider the user input before proceeding (if not empty).
 - ERROR on gate failures or unresolved clarifications
 - Do NOT generate any code, code fences, or implementation snippets
 - All design artifacts must be written in prose, Markdown tables, and structured text
-- Claude CLI writes all implementation code based on these prose artifacts
+- The human writes all implementation code based on these prose artifacts
 - Focus on WHAT needs to be built and WHY, not HOW to implement it

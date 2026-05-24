@@ -1,4 +1,4 @@
-"""sdd tasks — Create a Claude CLI execution checklist from planning artifacts."""
+"""sdd tasks — Create a human implementation checklist from planning artifacts."""
 
 from pathlib import Path
 
@@ -29,7 +29,7 @@ def _find_feature_dir(root: Path, feature: str) -> Path:
 @click.option("--model", "-m", default="gpt-4o-mini", help="LLM model to use.")
 @click.option("--no-ai", is_flag=True, help="Skip AI, create blank template only.")
 def tasks_cmd(feature: str, path: str, model: str, no_ai: bool):
-    """Generate a Claude CLI execution checklist from planning artifacts."""
+    """Generate a human implementation checklist from planning artifacts."""
     root = Path(path).resolve()
     feature_dir = _find_feature_dir(root, feature)
 
@@ -64,7 +64,7 @@ def tasks_cmd(feature: str, path: str, model: str, no_ai: bool):
         console.print("[dim]Generating task breakdown...[/]")
         ai = AIOrchestrator(model=model, audit_dir=feature_dir)
 
-        prompt = f"""Based on the following planning artifacts, create a detailed implementation checklist for Claude CLI.
+        prompt = f"""Based on the following planning artifacts, create a detailed implementation checklist for the human developer.
 
 ARTIFACTS:
 {artifacts_text}
@@ -110,11 +110,11 @@ IMPORTANT RULES:
 - Keep tasks concrete and actionable
 - Do NOT suggest any code, commands, or executable content
 
-## Claude CLI Implementation Notes
-(Context and guidance for Claude CLI to implement these tasks effectively)
+## Human Implementation Notes
+(Context and guidance for the human to implement these tasks effectively)
 - Include specific file paths where code should be written
 - Reference the requirement each task fulfills
-- Note key context from the spec/plan that Claude CLI needs
+- Note key context from the spec/plan that the human needs
 """
         try:
             content = ai.generate(prompt, feature=feature_dir.name)
@@ -129,7 +129,7 @@ IMPORTANT RULES:
     console.print()
     console.print("[bold green]Task breakdown created.[/] Next steps:")
     console.print(f"  1. Review: {tasks_path.relative_to(root)}")
-    console.print("  2. Send tasks to Claude CLI for implementation")
+    console.print("  2. Send tasks to the human for implementation")
     console.print(f"  3. After implementing, run [bold]sdd review --feature {feature_dir.name}[/]")
 
 

@@ -17,7 +17,7 @@ def build_review_prompt(feature_dir: Path, implementation_notes: str = "") -> st
         Optional developer-provided description of what they implemented.
     """
     parts = [
-        "You are reviewing a Claude CLI implementation against its specification and plan.",
+        "You are reviewing a human implementation against its specification and plan.",
         "Your job is to identify gaps, contradictions, and missing requirements.",
         "You MUST NOT suggest code fixes or output any code.",
         "Produce your review as prose with sections for: gaps, contradictions, "

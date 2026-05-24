@@ -1,5 +1,5 @@
 ---
-name: csdd-vision
+name: vision
 description: "Define the product vision — what it is, who it's for, why it matters. Use as the first step in a new Claude SDD project after initialization."
 argument-hint: "[product idea or description]"
 ---
@@ -13,9 +13,9 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, or copy-paste-ready snippets. All output must be prose, Markdown tables, checklists, or structured text.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. You MUST NOT generate any executable code, code fences with implementation content, shell commands, configuration files, copy-paste-ready snippets, patches, or diffs. Implementation is the human's job — your output is prose-only planning material. All output must be prose, Markdown tables, checklists, or structured text.
 
-The text the user typed after `/csdd-vision` in the triggering message **is** the product description. Use it as the starting point for defining the product vision.
+The text the user typed after `/vision` in the triggering message **is** the product description. Use it as the starting point for defining the product vision.
 
 Given that product description, do this:
 
@@ -66,7 +66,7 @@ Given that product description, do this:
 6. **Report completion** with:
    - Summary of the product vision
    - Any [NEEDS CLARIFICATION] items that need answers
-   - Suggestion to proceed with `/csdd-roadmap` to define features
+   - Suggestion to proceed with `/roadmap` to define features
 
 ## Quick Guidelines
 
