@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`csdd integrate claude-vscode` now prints a "Reload VS Code window" instruction** so users know the Claude chat panel needs to re-scan `.claude/commands/` before new slash commands appear. This was the most common reason `/vision` appeared to be missing after a successful install.
+- **`csdd integrate` warns when legacy Copilot paths (`.github/skills/`, `.github/copilot-instructions.md`) are still present** in the project and explains they are safe to delete.
+- **`csdd check` now detects when installed command files have drifted from the bundled templates** (e.g., the CLI was upgraded but `csdd integrate claude-vscode` was never re-run in the project). It lists the stale command names and tells the user how to refresh.
+- **`csdd check` also flags leftover `.github/skills/` / `.github/copilot-instructions.md`** from pre-0.2.0 installs.
+- **`csdd check` prints the installed `csdd` version** in its header so users can confirm they upgraded.
+- **README: new Troubleshooting section** with an ordered checklist for "`/vision` does not appear in the Claude chat panel," covering `csdd check`, re-running integrate, the VS Code reload step, the upgrade-without-reintegrating case, and how to verify the installed `csdd` version.
+
 ### Fixed
 
 - **`/vision` and other slash commands now actually work in the Claude VS Code extension.** The previous release installed slash commands to `.github/skills/<name>/SKILL.md`, which is the GitHub Copilot Agent Skills convention — the Claude Code VS Code extension does not read that path. Commands are now installed to `.claude/commands/<name>.md`, the canonical Claude Code project-commands directory. Each markdown file becomes a `/<name>` slash command in the chat panel.

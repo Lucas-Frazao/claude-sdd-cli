@@ -38,7 +38,9 @@ This creates:
 
 ### 2. Open in VS Code with the Claude extension
 
-Open the project in VS Code, open the Claude chat panel, and type `/` to discover the slash commands.
+Open the project in VS Code, **reload the window** (Command Palette → `Developer: Reload Window`) if it was already open, then open the Claude chat panel and type `/` to discover the slash commands.
+
+> The Claude extension scans `.claude/commands/` when the chat panel starts. Files written after the panel opened won't appear until you reload.
 
 | Command | What it does |
 |---------|-------------|
@@ -160,6 +162,24 @@ csdd integrate claude-vscode # Re-run VS Code integration
 csdd check                   # Verify project setup
 csdd version                 # Show version
 ```
+
+## Troubleshooting
+
+### `/vision` (or any other slash command) does not appear in the Claude chat panel
+
+The Claude Code VS Code extension reads project-scoped slash commands from `.claude/commands/<name>.md`. If a command does not appear when you type `/`, work through the checklist below — in order:
+
+1. **From the project root, run `csdd check`.** It reports the installed CSDD version, whether `.claude/commands/` exists, which of the 11 expected `<name>.md` files are present, and whether their content matches the version bundled with the installed `csdd` package. It also flags stale `.github/skills/` directories left behind by pre-0.2.0 versions.
+
+2. **If `.claude/commands/` is missing or empty, run `csdd integrate claude-vscode`.** This is also required after upgrading `csdd` — `csdd check` will tell you when installed command files have drifted from the bundled templates.
+
+3. **Reload the VS Code window.** Open the command palette (`Cmd/Ctrl+Shift+P`) and run `Developer: Reload Window`. The Claude extension scans `.claude/commands/` when its chat panel starts; files written after the panel opened are not picked up until you reload.
+
+4. **If you upgraded the `csdd` package recently, re-run the integration in every existing project.** Upgrading the CLI does not retroactively rewrite slash-command files that were copied into your projects.
+
+5. **Confirm the `csdd` version.** Run `csdd version` — it must be 0.2.0 or later. Earlier releases installed commands under `.github/skills/<name>/SKILL.md`, which the Claude extension does not read. Upgrade with `uv tool install --reinstall claude-sdd-cli --from git+https://github.com/Lucas-Frazao/claude-sdd-cli.git`.
+
+If you've done all of the above and a command still does not appear, open an issue with the output of `csdd check` and the contents of `.claude/commands/`.
 
 ## How It Differs from spec-kit
 
