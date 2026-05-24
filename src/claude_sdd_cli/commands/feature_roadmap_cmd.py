@@ -154,7 +154,7 @@ IMPORTANT:
     console.print("     [bold]sdd clarify --feature 001-...[/]")
     console.print("     [bold]sdd plan --feature 001-...[/]")
     console.print("     [bold]sdd tasks --feature 001-...[/]")
-    console.print("     Then CLAUDE CLI IMPLEMENTS the feature")
+    console.print("     Then YOU IMPLEMENT the feature by hand")
     console.print("     [bold]sdd review --feature 001-...[/]")
 
 

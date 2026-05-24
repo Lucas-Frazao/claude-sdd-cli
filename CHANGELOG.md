@@ -7,13 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### ⚠ BREAKING CHANGES
+
+- **Slash commands renamed without aliases.** `/csdd.<name>` and `/csdd-<name>` no longer exist; the new names are `/<name>` (e.g. `/csdd.vision` → `/vision`, `/csdd.tech-stack` → `/tech-stack`, etc. for all 11 commands).
+- **Skill directories renamed.** `.github/skills/csdd-<name>/SKILL.md` is now `.github/skills/<name>/SKILL.md`.
+- **Default AI integration key changed** from `copilot` to `claude-vscode` (the `copilot` key is retained as a legacy alias that reuses the same installation mechanism).
+- **Migration for existing projects**: re-run `csdd integrate claude-vscode` from the project root to install the new skill layout. The old `.github/skills/csdd-*/` directories can then be deleted manually. Without this step, chat slash commands will continue to use the old names and contradict the updated planning-only prompts.
+
 ### Changed
 
 - **Simplified slash-command names**: `/csdd.vision` → `/vision`, `/csdd.tech-stack` → `/tech-stack`, etc. for all 11 commands.
 - **VS Code Claude extension focus**: Project is now oriented around Claude in the VS Code extension; AI assistant key is `claude-vscode` (Copilot retained as a legacy option since both share the same `.github/skills/` mechanism).
 - **Planning-only, human-implemented**: Constitution Article 2 renamed to "Human Implementation Mandate". All skill prompts, templates, and docs now explicitly forbid code, snippets, patches, and diffs — outputs are prose-only planning material (specs, plans, tasks with acceptance criteria, reviews).
-- Renamed `.github/skills/csdd-*` directories to `.github/skills/<name>` so the slash commands map directly without prefix.
 - Updated AI assistant instructions file content to reflect the new naming and the human-implements mandate.
+- `pyproject.toml` package description updated to "Claude plans; you implement."
 
 ## [0.2.0] -- 2026-04-08
 

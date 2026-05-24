@@ -11,7 +11,7 @@ from claude_sdd_cli.validators import validate_no_code
 # ── System prompt (constitution-level constraint) ────────────────────
 
 SYSTEM_PROMPT = """\
-You are a planning-only engineering copilot operating under a strict constitution.
+You are a planning-only engineering assistant operating under a strict constitution.
 
 ABSOLUTE RULES — violation of any rule invalidates your output:
 1. You MUST NOT produce executable code in any programming language.

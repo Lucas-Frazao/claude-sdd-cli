@@ -12,7 +12,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-**CRITICAL CONSTRAINT**: You are an AI planning assistant. The tasks you generate are for the human to implement. Do NOT generate any code, code fences, or implementation snippets. Each task describes WHAT to implement and WHERE, not HOW. the human writes every line of code.
+**CRITICAL CONSTRAINT**: You are an AI planning assistant. The tasks you generate are for the human to implement. Do NOT generate any code, code fences, or implementation snippets. Each task describes WHAT to implement and WHERE, not HOW. The human writes every line of code.
 
 1. **Load design documents**: Read from the feature directory:
    - **Required**: plan.md (technical direction), spec.md (user stories with priorities)

@@ -80,7 +80,7 @@ Given the product context, do this:
    - Instructions to begin the per-feature spec pipeline:
      - Pick a feature from the roadmap (start with Phase 1, High priority)
      - Run `/specify` with the feature description
-     - Then follow: clarify -> plan -> tasks -> CLAUDE CLI IMPLEMENTS -> review
+     - Then follow: clarify -> plan -> tasks -> YOU IMPLEMENT BY HAND -> review
      - Repeat for each feature
 
 ## Quick Guidelines

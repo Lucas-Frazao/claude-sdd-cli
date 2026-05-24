@@ -136,7 +136,7 @@ where specifications drive development, but the human implements all code based 
 
 The planning AI (Claude in the VS Code extension) acts as a **planning assistant**: it helps you think through requirements,
 identify ambiguity, structure plans, and review your work. It never writes code.
-the human implements the tasks.
+The human implements the tasks.
 
 ## The Developer's Role
 
@@ -164,7 +164,7 @@ Produces plan.md, research.md, data-model.md, contracts, and quickstart.md.
 Run `sdd tasks --feature <name>` to create a human implementation checklist.
 
 ## Phase 6: Implement
-the human implements the code based on the task breakdown.
+The human implements the code based on the task breakdown.
 
 ## Phase 7: Review
 Run `sdd review --feature <name>` to compare your implementation against the spec.

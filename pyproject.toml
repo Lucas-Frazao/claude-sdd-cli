@@ -1,7 +1,7 @@
 [project]
 name = "claude-sdd-cli"
 version = "0.2.0"
-description = "A specification-driven development CLI where AI plans via Copilot, and Claude CLI implements. AI plans, Claude codes."
+description = "A specification-driven development CLI for use with Claude in the VS Code extension. Claude plans (specs, plans, tasks, reviews — prose only); you implement by hand."
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
