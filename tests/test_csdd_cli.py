@@ -136,3 +136,54 @@ class TestCsddCheck:
 
         # check should mention the missing commands
         assert "missing" in result.output.lower() or "trace" in result.output
+
+    def test_check_flags_stale_command_file_content(self, tmp_path, monkeypatch):
+        """A drifted vision.md (older bundled content) must be flagged.
+
+        Reproduces the upgrade scenario: package upgraded, but the project
+        still has the old slash-command files because ``csdd integrate`` was
+        not re-run.
+        """
+        runner = CliRunner()
+        (tmp_path / ".csdd").mkdir()
+        monkeypatch.chdir(tmp_path)
+        _invoke(runner, ["integrate", "claude-vscode"])
+
+        vision_md = tmp_path / ".claude" / "commands" / "vision.md"
+        vision_md.write_text(
+            "---\ndescription: stale old content\n---\n\nold body $ARGUMENTS\n"
+        )
+
+        result = _invoke(runner, ["check"])
+        assert "drifted" in result.output or "refresh" in result.output
+
+    def test_check_flags_legacy_copilot_paths(self, tmp_path, monkeypatch):
+        runner = CliRunner()
+        (tmp_path / ".csdd").mkdir()
+        (tmp_path / ".github" / "skills").mkdir(parents=True)
+        (tmp_path / ".github" / "copilot-instructions.md").write_text("old\n")
+
+        monkeypatch.chdir(tmp_path)
+        result = _invoke(runner, ["check"])
+
+        assert ".github/skills" in result.output or "stale" in result.output.lower()
+
+    def test_integrate_prints_reload_instruction(self, tmp_path, monkeypatch):
+        runner = CliRunner()
+        (tmp_path / ".csdd").mkdir()
+        monkeypatch.chdir(tmp_path)
+
+        result = _invoke(runner, ["integrate", "claude-vscode"])
+
+        assert result.exit_code == 0, result.output
+        assert "Reload" in result.output or "reload" in result.output
+
+    def test_integrate_warns_about_legacy_paths(self, tmp_path, monkeypatch):
+        runner = CliRunner()
+        (tmp_path / ".csdd").mkdir()
+        (tmp_path / ".github" / "skills").mkdir(parents=True)
+        monkeypatch.chdir(tmp_path)
+
+        result = _invoke(runner, ["integrate", "claude-vscode"])
+
+        assert ".github/skills" in result.output or "legacy" in result.output.lower()

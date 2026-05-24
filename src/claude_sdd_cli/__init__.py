@@ -598,12 +598,21 @@ def init(
 
     if ai == "claude-vscode":
         next_steps.add_row("1.", "Open the project in VS Code")
-        next_steps.add_row("2.", "Open the Claude chat panel")
-        next_steps.add_row("3.", "Type: /vision to define your product vision")
-        next_steps.add_row("4.", "Type: /tech-stack to define your technology stack")
-        next_steps.add_row("5.", "Type: /architecture to define your application architecture")
-        next_steps.add_row("6.", "Type: /roadmap to define your feature roadmap")
-        next_steps.add_row("7.", "For each feature: /specify -> /clarify -> /plan -> /tasks -> YOU IMPLEMENT -> /review")
+        next_steps.add_row(
+            "2.",
+            "If VS Code was already open: run 'Developer: Reload Window' so "
+            "the Claude extension picks up .claude/commands/",
+        )
+        next_steps.add_row("3.", "Open the Claude chat panel")
+        next_steps.add_row("4.", "Type: /vision to define your product vision")
+        next_steps.add_row("5.", "Type: /tech-stack to define your technology stack")
+        next_steps.add_row("6.", "Type: /architecture to define your application architecture")
+        next_steps.add_row("7.", "Type: /roadmap to define your feature roadmap")
+        next_steps.add_row(
+            "8.",
+            "For each feature: /specify -> /clarify -> /plan -> /tasks -> "
+            "YOU IMPLEMENT -> /review",
+        )
     else:
         next_steps.add_row("1.", "Review .csdd/memory/constitution.md")
         next_steps.add_row("2.", "Run: csdd vision --description 'your product idea'")
@@ -654,8 +663,56 @@ def integrate(
     for f in created:
         rel = f.relative_to(project_path)
         console.print(f"  [dim]{rel}[/dim]")
+
+    _warn_about_legacy_paths(project_path)
+
     console.print()
-    console.print("[dim]New files have been staged. Run 'git commit' to save them.[/dim]")
+    console.print(
+        Panel(
+            "[bold]Reload required for the Claude chat panel to pick up new "
+            "slash commands.[/bold]\n\n"
+            "In VS Code, run the command palette action "
+            "[cyan]Developer: Reload Window[/cyan] (Cmd/Ctrl+Shift+P), or close "
+            "and reopen the Claude chat panel. Then type [cyan]/[/cyan] in the "
+            "chat — [cyan]/vision[/cyan], [cyan]/specify[/cyan], etc. should appear.\n\n"
+            "If commands still do not appear, run [cyan]csdd check[/cyan] from "
+            "this directory to verify the install.",
+            title="[bold yellow]Next step[/bold yellow]",
+            border_style="yellow",
+            padding=(1, 2),
+        )
+    )
+    if is_git_repo(project_path):
+        console.print(
+            "[dim]New files have been staged. Run 'git commit' to save them.[/dim]"
+        )
+
+
+def _warn_about_legacy_paths(project_path: Path) -> None:
+    """Warn if old Copilot-era paths still linger in the project.
+
+    These were created by pre-0.2.0 versions of the integration and are now
+    inert — but they confuse users who think the tool is still managing them.
+    """
+    legacy = [
+        project_path / ".github" / "skills",
+        project_path / ".github" / "copilot-instructions.md",
+    ]
+    found = [p for p in legacy if p.exists()]
+    if not found:
+        return
+    console.print()
+    console.print(
+        "[yellow]Warning:[/yellow] legacy paths from an older version of this "
+        "tool are still present and are no longer used:"
+    )
+    for p in found:
+        rel = p.relative_to(project_path)
+        console.print(f"  [dim]{rel}[/dim]")
+    console.print(
+        "[dim]Safe to delete. They were the old GitHub Copilot install location; "
+        "Claude Code reads .claude/commands/ instead.[/dim]"
+    )
 
 
 @app.command()
@@ -663,7 +720,10 @@ def check():
     """Verify project setup and installed tools."""
     project_path = Path.cwd()
 
-    console.print("[bold]Checking CSDD project setup...[/bold]\n")
+    console.print(
+        f"[bold]Checking CSDD project setup...[/bold] "
+        f"[dim](csdd v{__version__})[/dim]\n"
+    )
 
     tracker = StepTracker("Project Check")
     tracker.add("csdd_dir", ".csdd/ directory")
@@ -675,7 +735,9 @@ def check():
     tracker.add("templates", "Templates")
     tracker.add("scripts", "Scripts")
     tracker.add("commands", "Claude VS Code slash commands")
+    tracker.add("commands_fresh", "Slash-command content is up to date")
     tracker.add("claude_md", "CLAUDE.md project context")
+    tracker.add("legacy", "No legacy Copilot paths")
     tracker.add("git", "Git repository")
 
     # Check .csdd/
@@ -759,11 +821,50 @@ def check():
             "No .claude/commands/ directory -- run 'csdd integrate claude-vscode'",
         )
 
+    # Check that installed command files are up to date with the bundled
+    # templates -- this catches the case where the package was upgraded but
+    # `csdd integrate claude-vscode` was never re-run in this project.
+    if commands_dir.is_dir():
+        from claude_sdd_cli.integrations.claude_vscode import (
+            ClaudeVSCodeIntegration,
+        )
+
+        integration = ClaudeVSCodeIntegration()
+        stale = _stale_command_files(integration, commands_dir)
+        if stale:
+            tracker.error(
+                "commands_fresh",
+                f"{len(stale)} file(s) drifted from bundled templates "
+                f"({', '.join(sorted(stale))}). Run "
+                "'csdd integrate claude-vscode' to refresh.",
+            )
+        else:
+            tracker.complete("commands_fresh", "Matches bundled templates")
+    else:
+        tracker.skip("commands_fresh", "No commands installed yet")
+
     # Check CLAUDE.md
     if (project_path / "CLAUDE.md").is_file():
         tracker.complete("claude_md", "Found")
     else:
         tracker.error("claude_md", "CLAUDE.md missing -- run 'csdd integrate claude-vscode'")
+
+    # Warn about legacy Copilot-era paths
+    legacy_paths = [
+        project_path / ".github" / "skills",
+        project_path / ".github" / "copilot-instructions.md",
+    ]
+    legacy_present = [p for p in legacy_paths if p.exists()]
+    if legacy_present:
+        rels = ", ".join(
+            str(p.relative_to(project_path)) for p in legacy_present
+        )
+        tracker.error(
+            "legacy",
+            f"Found stale: {rels}. Safe to delete (Claude Code does not read them).",
+        )
+    else:
+        tracker.complete("legacy", "Clean")
 
     # Check git
     if is_git_repo(project_path):
@@ -772,6 +873,35 @@ def check():
         tracker.skip("git", "Not a git repository")
 
     console.print(tracker.render())
+
+    # Hint after the check report
+    if commands_dir.is_dir() and not any(commands_dir.glob("*.md")):
+        console.print()
+        console.print(
+            "[yellow]No slash-command files found.[/yellow] Run "
+            "[cyan]csdd integrate claude-vscode[/cyan] to install them, then "
+            "reload VS Code."
+        )
+
+
+def _stale_command_files(integration, installed_dir: Path) -> set[str]:
+    """Return command-name stems whose installed content differs from bundled.
+
+    A drift means the package was upgraded but the project never re-ran
+    `csdd integrate claude-vscode`, so the user sees old command behavior.
+    """
+    stale: set[str] = set()
+    templates = {p.stem: p for p in integration.list_command_templates()}
+    for name, src in templates.items():
+        installed = installed_dir / f"{name}.md"
+        if not installed.is_file():
+            continue
+        try:
+            if src.read_bytes() != installed.read_bytes():
+                stale.add(name)
+        except OSError:
+            stale.add(name)
+    return stale
 
 
 @app.command()
