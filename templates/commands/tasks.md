@@ -1,5 +1,6 @@
 ---
 description: Generate an actionable, dependency-ordered tasks.md checklist for the human based on available design artifacts.
+argument-hint: "[feature name]"
 ---
 
 ## User Input

@@ -1,13 +1,6 @@
 ---
 description: Define the technology stack — languages, frameworks, databases, hosting, and all tooling decisions.
-handoffs:
-  - label: Define Architecture
-    agent: architecture
-    prompt: Define the application architecture based on the product vision and tech stack.
-    send: true
-  - label: Update Product Vision
-    agent: vision
-    prompt: Update the product vision based on insights from tech stack planning.
+argument-hint: "[stack preferences or constraints]"
 ---
 
 ## User Input

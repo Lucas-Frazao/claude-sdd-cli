@@ -1,13 +1,6 @@
 ---
 description: Define the application architecture — structure, layers, components, data flow, and design patterns.
-handoffs:
-  - label: Define Feature Roadmap
-    agent: roadmap
-    prompt: Define the feature roadmap based on the product vision, tech stack, and architecture.
-    send: true
-  - label: Update Tech Stack
-    agent: tech-stack
-    prompt: Update the tech stack based on insights from architecture planning.
+argument-hint: "[architectural preferences or constraints]"
 ---
 
 ## User Input

@@ -1,12 +1,6 @@
 ---
 description: Create or update the project constitution from interactive or provided principle inputs, ensuring all dependent templates stay in sync.
-handoffs:
-  - label: Define Product Vision
-    agent: vision
-    prompt: Define the product vision based on the updated constitution.
-  - label: Build Specification
-    agent: specify
-    prompt: Implement the feature specification based on the updated constitution. I want to build...
+argument-hint: "[principles or constitutional updates]"
 ---
 
 ## User Input

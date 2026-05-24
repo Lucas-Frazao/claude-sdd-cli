@@ -1,12 +1,6 @@
 ---
 description: Define ALL features needed to realize the product vision as a structured feature roadmap.
-handoffs:
-  - label: Specify a Feature
-    agent: specify
-    prompt: Create a specification for feature FEAT-XXX from the roadmap. I want to build...
-  - label: Update Product Vision
-    agent: vision
-    prompt: Update the product vision based on insights from roadmap planning.
+argument-hint: "[additional roadmap context]"
 ---
 
 ## User Input

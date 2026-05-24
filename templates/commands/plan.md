@@ -1,12 +1,6 @@
 ---
-description: Execute the implementation planning workflow using the plan template to generate design artifacts -- ALL IN PROSE, no code.
-handoffs:
-  - label: Create Tasks
-    agent: tasks
-    prompt: Break the plan into tasks for the human
-    send: true
-scripts:
-  sh: scripts/bash/setup-plan.sh --json
+description: Execute the implementation planning workflow using the plan template to generate design artifacts — ALL IN PROSE, no code.
+argument-hint: "[feature name or context]"
 ---
 
 ## User Input
@@ -21,7 +15,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 **CRITICAL CONSTRAINT**: You are an AI planning assistant operating under the Claude SDD constitution. Do NOT generate any code, code fences, or implementation snippets. All design artifacts (research.md, data-model.md, contracts/, quickstart.md) must be written entirely in prose, Markdown tables, and structured text. The human writes ALL code.
 
-1. **Setup**: Run `{SCRIPT}` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH.
+1. **Setup**: Run `.csdd/scripts/bash/setup-plan.sh --json` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH.
 
 2. **Load context**: Read FEATURE_SPEC and `.csdd/memory/constitution.md`. Load IMPL_PLAN template (already copied).
 

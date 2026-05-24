@@ -7,26 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **`/vision` and other slash commands now actually work in the Claude VS Code extension.** The previous release installed slash commands to `.github/skills/<name>/SKILL.md`, which is the GitHub Copilot Agent Skills convention — the Claude Code VS Code extension does not read that path. Commands are now installed to `.claude/commands/<name>.md`, the canonical Claude Code project-commands directory. Each markdown file becomes a `/<name>` slash command in the chat panel.
+
 ### ⚠ BREAKING CHANGES
 
-- **Slash commands renamed without aliases.** `/csdd.<name>` and `/csdd-<name>` no longer exist; the new names are `/<name>` (e.g. `/csdd.vision` → `/vision`, `/csdd.tech-stack` → `/tech-stack`, etc. for all 11 commands).
-- **Skill directories renamed.** `.github/skills/csdd-<name>/SKILL.md` is now `.github/skills/<name>/SKILL.md`.
-- **Default AI integration key changed** from `copilot` to `claude-vscode` (the `copilot` key is retained as a legacy alias that reuses the same installation mechanism).
-- **Migration for existing projects**: re-run `csdd integrate claude-vscode` from the project root to install the new skill layout. The old `.github/skills/csdd-*/` directories can then be deleted manually. Without this step, chat slash commands will continue to use the old names and contradict the updated planning-only prompts.
+- **Slash-command installation path changed** from `.github/skills/<name>/SKILL.md` to `.claude/commands/<name>.md`. After upgrading, re-run `csdd integrate claude-vscode` from the project root. The old `.github/skills/` and `.github/copilot-instructions.md` files can then be deleted manually.
+- **Project context file renamed** from `.github/copilot-instructions.md` to `CLAUDE.md` (the canonical Claude Code context file). The new file is written at the project root.
+- **GitHub Copilot support removed.** The `copilot` AI assistant key, the `CopilotIntegration` class, the `templates/skills/` directory, and the GitHub Copilot Agent Skill frontmatter (`handoffs:`, `scripts:`) have been removed. Only Claude in the VS Code extension is supported (`--ai claude-vscode`).
+- **Command frontmatter cleaned up** to the Claude Code standard: `description` (one-line picker hint) and `argument-hint` (placeholder for the input). Copilot-specific `handoffs:` and `scripts:` blocks have been stripped.
 
 ### Changed
 
-- **Simplified slash-command names**: `/csdd.vision` → `/vision`, `/csdd.tech-stack` → `/tech-stack`, etc. for all 11 commands.
-- **VS Code Claude extension focus**: Project is now oriented around Claude in the VS Code extension; AI assistant key is `claude-vscode` (Copilot retained as a legacy option since both share the same `.github/skills/` mechanism).
-- **Planning-only, human-implemented**: Constitution Article 2 renamed to "Human Implementation Mandate". All skill prompts, templates, and docs now explicitly forbid code, snippets, patches, and diffs — outputs are prose-only planning material (specs, plans, tasks with acceptance criteria, reviews).
-- Updated AI assistant instructions file content to reflect the new naming and the human-implements mandate.
-- `pyproject.toml` package description updated to "Claude plans; you implement."
+- `csdd init` and `csdd integrate claude-vscode` now install `.claude/commands/<name>.md` slash-command files and write `CLAUDE.md` at the project root.
+- `csdd check` looks for slash commands under `.claude/commands/` and verifies all 11 expected commands are present.
+- `README.md`, project-structure docs, and generated `CLAUDE.md` content updated to reflect the Claude-only positioning.
+- `pyproject.toml` keywords drop `copilot` and add `vscode`.
 
 ## [0.2.0] -- 2026-04-08
 
 ### Changed
 
-- Transformed from human-sdd-cli to claude-sdd-cli: AI plans via Copilot, Claude CLI implements
+- Transformed from human-sdd-cli to claude-sdd-cli (early release; superseded by the slash-command pivot in 0.3.0).
 
 ## [0.1.0] -- 2026-04-05
 

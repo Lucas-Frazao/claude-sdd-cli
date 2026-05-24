@@ -1,5 +1,6 @@
 ---
 description: Compare the human developer's implementation against the feature specification and produce a gap analysis with follow-up tasks.
+argument-hint: "[feature name]"
 ---
 
 ## User Input

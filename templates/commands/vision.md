@@ -1,10 +1,6 @@
 ---
-description: Define the product vision — what it is, who it's for, what problem it solves, and guiding principles.
-handoffs:
-  - label: Define Tech Stack
-    agent: tech-stack
-    prompt: Define the tech stack based on the product vision.
-    send: true
+description: Define the product vision — what it is, who it's for, why it matters. Use as the first step in a new Claude SDD project after initialization.
+argument-hint: "[product idea or description]"
 ---
 
 ## User Input
@@ -70,7 +66,7 @@ Given that product description, do this:
 6. **Report completion** with:
    - Summary of the product vision
    - Any [NEEDS CLARIFICATION] items that need answers
-   - Suggestion to proceed with `/roadmap` to define features
+   - Suggestion to proceed with `/tech-stack` to define the technology stack.
 
 ## Quick Guidelines
 
